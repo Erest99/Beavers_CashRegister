@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Pokladna</string>
+    <string name="buy_layout_confirm">Potvrdit</string>
+    <string name="activity_add_buy_name">Název</string>
+    <string name="activity_add_buy_buy">Kupní cena</string>
+    <string name="activity_add_buy_sell">Prodejní cena</string>
+    <string name="activity_add_buy_amount">Množství</string>
+    <string name="activity_add_buy_confirm">Potvrdit</string>
+
+</resources>

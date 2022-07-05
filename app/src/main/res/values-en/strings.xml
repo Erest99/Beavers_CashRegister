@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cash register</string>
+    <string name="buy_layout_confirm">Confirm</string>
+    <string name="activity_add_buy_name">Name</string>
+    <string name="activity_add_buy_buy">Purchase price</string>
+    <string name="activity_add_buy_sell">Selling price</string>
+    <string name="activity_add_buy_amount">Amount</string>
+    <string name="activity_add_buy_confirm">Confirm</string>
+</resources>
