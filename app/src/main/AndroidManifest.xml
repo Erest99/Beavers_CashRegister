@@ -17,7 +17,7 @@
             android:name=".AddToStorage"
             android:label="Test"
             android:parentActivityName=".Buy"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".Buy"
             android:label="Sklad"

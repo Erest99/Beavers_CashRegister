@@ -24,6 +24,7 @@ public class Buy extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Buy.this, AddToStorage.class);
+                startActivity(intent);
             }
         });
     }

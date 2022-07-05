@@ -7,4 +7,7 @@
     <string name="activity_add_buy_sell">Selling price</string>
     <string name="activity_add_buy_amount">Amount</string>
     <string name="activity_add_buy_confirm">Confirm</string>
+
+    <string name="data_insert_1">Data saved succesfuly.</string>
+    <string name="data_insert_0">Failed to save data.</string>
 </resources>
