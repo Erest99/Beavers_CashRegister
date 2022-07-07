@@ -1,11 +1,17 @@
-package com.example.pokladna;
+package com.example.pokladna.EditSection;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.pokladna.InputHelper;
+import com.example.pokladna.Item;
+import com.example.pokladna.MyDatabaseHelper;
+import com.example.pokladna.R;
 
 public class AddToStorage extends AppCompatActivity {
 
@@ -15,13 +21,13 @@ public class AddToStorage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_buy);
+        setContentView(R.layout.add_item);
 
-        addButton = findViewById(R.id.confirmButton2);
-        nameInput = findViewById(R.id.editTextName);
-        buyInput = findViewById(R.id.editTextBuy);
-        sellInput = findViewById(R.id.editTextSell);
-        amountInput = findViewById(R.id.editTextAmmount);
+        addButton = findViewById(R.id.updateButton);
+        nameInput = findViewById(R.id.editTextNameUpdate);
+        buyInput = findViewById(R.id.editTextBuyUpdate);
+        sellInput = findViewById(R.id.editTextSellUpdate);
+        amountInput = findViewById(R.id.editTextAmmountUpdate);
 
 
 
@@ -36,7 +42,10 @@ public class AddToStorage extends AppCompatActivity {
                 InputHelper helper = new InputHelper();
                 Item item = new Item(helper.readText(nameInput),helper.readNumber(buyInput),helper.readNumber(sellInput),helper.readNumber(amountInput));
 
-                myDB.addItem(item);
+                myDB.addItem(item,getApplicationContext());
+
+                Intent intent = new Intent(AddToStorage.this, Storage.class);
+                startActivity(intent);
             }
         });
     }

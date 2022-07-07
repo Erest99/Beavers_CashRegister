@@ -4,15 +4,39 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+import com.example.pokladna.BuySection.Buy;
+import com.example.pokladna.EditSection.Storage;
 
 public class MainActivity extends AppCompatActivity {
+
+    Button buyButton, storageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(MainActivity.this, Buy.class);
-        startActivity(intent);
+        buyButton = findViewById(R.id.buyButton);
+        storageButton = findViewById(R.id.storageButton);
+
+        buyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Buy.class);
+                startActivity(intent);
+            }
+        });
+
+        storageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Storage.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }

@@ -7,7 +7,36 @@
     <string name="activity_add_buy_sell">Selling price</string>
     <string name="activity_add_buy_amount">Amount</string>
     <string name="activity_add_buy_confirm">Confirm</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
+    <string name="add">Add</string>
+    <string name="buy">Buy</string>
+    <string name="addbuy">Buy more</string>
+    <string name="storage">Storage</string>
+    <string name="wrongInput">Wrong data entered.</string>
+
+
+    <string name="noData">No data to show. :/</string>
+    <string name="deleteAll">Delete all?</string>
+    <string name="deleteAlllonger">Do you wish to delete all records?</string>
 
     <string name="data_insert_1">Data saved succesfuly.</string>
     <string name="data_insert_0">Failed to save data.</string>
+
+    <string name="data_update_1">Data updated successfully.</string>
+    <string name="data_update_0">Data failed to update.</string>
+
+    <string name="data_delete_1">Data deleted successfully.</string>
+    <string name="data_delete_0">Failed to delete data.</string>
+
+    <string name="sellingFor">Selling for:</string>
+    <string name="boughtFor">Purchased for:</string>
+    <string name="pieces">pieces:</string>
+
+    <string name="purchase">Purchase</string>
+    <string name="cashRegister">Cash register</string>
+    <string name="buyAdditional">Purchase additional item</string>
+    <string name="buyItem">Purchase item</string>
+    <string name="addItem">Add item</string>
+    <string name="updateItem">Update item</string>
 </resources>

@@ -14,25 +14,42 @@
         android:theme="@style/Theme.Pokladna"
         tools:targetApi="31">
         <activity
-            android:name=".AddToStorage"
-            android:label="Test"
-            android:parentActivityName=".Buy"
-            android:exported="true" />
+            android:name=".BuySection.BuyMoreActivity"
+            android:exported="false"
+            android:label="Dokoupit"
+            android:parentActivityName=".BuySection.Buy" />
         <activity
-            android:name=".Buy"
-            android:label="Sklad"
-            android:parentActivityName=".MainActivity"
-            android:exported="true" />
+            android:name=".BuySection.BuyToStorage"
+            android:exported="true"
+            android:label="@string/buyItem"
+            android:parentActivityName=".BuySection.Buy" />
+        <activity
+            android:name=".BuySection.Buy"
+            android:exported="true"
+            android:label="@string/buy"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="Pokladna">
+            android:label="@string/cashRegister">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".EditSection.Storage"
+            android:exported="true"
+            android:label="@string/storage"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".EditSection.AddToStorage"
+            android:exported="true"
+            android:label="@string/addItem"
+            android:parentActivityName=".EditSection.Storage"/>
+        <activity android:name=".EditSection.UpdateActivity"
+            android:exported="true"
+            android:label="@string/updateItem"
+            android:parentActivityName=".EditSection.Storage"/>
     </application>
 
 </manifest>

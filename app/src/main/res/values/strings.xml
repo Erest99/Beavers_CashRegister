@@ -6,8 +6,36 @@
     <string name="activity_add_buy_sell">Prodejní cena</string>
     <string name="activity_add_buy_amount">Množství</string>
     <string name="activity_add_buy_confirm">Potvrdit</string>
+    <string name="update">Upravit</string>
+    <string name="delete">Smazat</string>
+    <string name="add">Přidat</string>
+    <string name="buy">Koupit</string>
+    <string name="addbuy">Dokoupit</string>
+    <string name="storage">Sklad</string>
+    <string name="noData">Zatím zde nejsou žádná data :/</string>
+    <string name="deleteAll">Vymazat vše?</string>
+    <string name="deleteAlllonger">Opravdu si přejete vymazat všechny záznamy?</string>
+    <string name="wrongInput">Byla zadána nesprávna data.</string>
+
 
     <string name="data_insert_1">Data byla úspěšně uložena.</string>
     <string name="data_insert_0">Data se neuložila.</string>
+
+    <string name="data_update_1">Data byla úspěšně upravena.</string>
+    <string name="data_update_0">Data se nepodařilo upravit.</string>
+
+    <string name="data_delete_1">Data byla úspěšně smazána.</string>
+    <string name="data_delete_0">Data se nepodařilo smazat.</string>
+
+    <string name="sellingFor">Prodáváme za:</string>
+    <string name="boughtFor">Koupeno za:</string>
+    <string name="pieces">Kusů:</string>
+
+    <string name="purchase">Nákup</string>
+    <string name="cashRegister">Pokladna</string>
+    <string name="buyAdditional">Dokoupit</string>
+    <string name="buyItem">Koupit položku</string>
+    <string name="addItem">Přidat položku</string>
+    <string name="updateItem">Upravit položku</string>
 
 </resources>

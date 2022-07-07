@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddToStorage">
+    tools:context=".BuySection.BuyToStorage">
 
     <EditText
-        android:id="@+id/editTextSell"
+        android:id="@+id/editTextSellUpdate"
         android:layout_width="0dp"
         android:layout_height="62dp"
         android:layout_marginStart="64dp"
@@ -18,10 +18,10 @@
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextBuy" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextBuyUpdate" />
 
     <EditText
-        android:id="@+id/editTextAmmount"
+        android:id="@+id/editTextAmmountUpdate"
         android:layout_width="0dp"
         android:layout_height="62dp"
         android:layout_marginStart="64dp"
@@ -32,10 +32,10 @@
         android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSell" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextSellUpdate" />
 
     <EditText
-        android:id="@+id/editTextBuy"
+        android:id="@+id/editTextBuyUpdate"
         android:layout_width="0dp"
         android:layout_height="62dp"
         android:layout_marginStart="64dp"
@@ -46,10 +46,10 @@
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextName" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextNameUpdate" />
 
     <EditText
-        android:id="@+id/editTextName"
+        android:id="@+id/editTextNameUpdate"
         android:layout_width="0dp"
         android:layout_height="62dp"
         android:layout_marginStart="64dp"
@@ -64,7 +64,7 @@
         app:layout_constraintVertical_bias="0.19999999" />
 
     <Button
-        android:id="@+id/confirmButton2"
+        android:id="@+id/updateButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"

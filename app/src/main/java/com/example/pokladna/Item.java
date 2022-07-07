@@ -66,4 +66,12 @@ public class Item {
         this.sell = sell;
         this.ammount = ammount;
     }
+
+    public Item(Long id, String name, Integer buy, Integer sell, Integer ammount) {
+        this.id = id;
+        this.name = name;
+        this.buy = buy;
+        this.sell = sell;
+        this.ammount = ammount;
+    }
 }
