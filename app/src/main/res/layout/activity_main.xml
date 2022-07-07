@@ -7,6 +7,16 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/sellButton"
+        android:layout_width="149dp"
+        android:layout_height="91dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/sell"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/storageButton" />
+
+    <Button
         android:id="@+id/storageButton"
         android:layout_width="149dp"
         android:layout_height="91dp"

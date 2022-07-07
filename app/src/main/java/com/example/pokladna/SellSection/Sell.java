@@ -1,4 +1,4 @@
-package com.example.pokladna.EditSection;
+package com.example.pokladna.SellSection;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -21,21 +21,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pokladna.BuySection.Buy;
 import com.example.pokladna.Item;
+import com.example.pokladna.MainActivity;
 import com.example.pokladna.MyDatabaseHelper;
 import com.example.pokladna.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Storage extends AppCompatActivity {
+public class Sell extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    Button confirmButton;
 
+    Button sellButton, debtButton;
     MyDatabaseHelper myDB;
     List<Item> data;
     CustomAdapter customAdapter;
+    List<Item> cart;
 
     ImageView empty_image;
     TextView no_data;
@@ -44,28 +47,35 @@ public class Storage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.storage_layout);
+        setContentView(R.layout.sell_layout);
 
         recyclerView = findViewById(R.id.recyclerView);
-        empty_image = findViewById(R.id.imageNoDataS);
-        no_data = findViewById(R.id.textViewNoDataS);
-        confirmButton = findViewById(R.id.confirmButton);
-        confirmButton.setOnClickListener(new View.OnClickListener() {
+        empty_image = findViewById(R.id.imageViewNoDataSS);
+        no_data = findViewById(R.id.textViewNoDataSS);
+        sellButton = findViewById(R.id.sellButton);
+        sellButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Storage.this, AddToStorage.class);
-                startActivity(intent);
+            public void onClick(View v) {
+                //cart contains selected items
+                cart = customAdapter.getCart();
+            }
+        });
+        debtButton = findViewById(R.id.debtButton);
+        debtButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO read cart, create debt record with name input in dialog and todays date
             }
         });
 
-        myDB = new MyDatabaseHelper(Storage.this);
+        myDB = new MyDatabaseHelper(Sell.this);
         data = new ArrayList<>();
 
         data = storeDataInList();
 
-        customAdapter = new CustomAdapter(Storage.this, Storage.this,data);
+        customAdapter = new CustomAdapter(Sell.this, Sell.this,data);
         recyclerView.setAdapter(customAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(Storage.this));
+        recyclerView.setLayoutManager(new LinearLayoutManager(Sell.this));
     }
 
     @Override
@@ -104,22 +114,6 @@ public class Storage extends AppCompatActivity {
         return items;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.my_menu,menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId()==R.id.delete_all)
-        {
-            confirmDialog();
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     void confirmDialog()
     {
@@ -129,7 +123,7 @@ public class Storage extends AppCompatActivity {
         builder.setPositiveButton(getApplicationContext().getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                MyDatabaseHelper myDB = new MyDatabaseHelper(Storage.this);
+                MyDatabaseHelper myDB = new MyDatabaseHelper(Sell.this);
                 myDB.deleteAllData();
                 Toast.makeText(getApplicationContext(),getApplicationContext().getResources().getString(R.string.deleting),Toast.LENGTH_SHORT).show();
                 recreate();

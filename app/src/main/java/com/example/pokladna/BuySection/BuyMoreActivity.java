@@ -4,14 +4,18 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.pokladna.Item;
 import com.example.pokladna.MyDatabaseHelper;
 import com.example.pokladna.R;
 
@@ -51,10 +55,25 @@ public class BuyMoreActivity extends AppCompatActivity {
                 buy = buyInput.getText().toString().trim();
                 sell = sellInput.getText().toString().trim();
 
+                Context context = getApplicationContext();
+                if( TextUtils.isDigitsOnly(buyInput.getText())
+                        &&TextUtils.isDigitsOnly(sellInput.getText())
+                        && TextUtils.isDigitsOnly(amountInput.getText())
+                        &&nameInput.getText().toString().length()>0
+                        &&buyInput.getText().toString().length()>0
+                        &&sellInput.getText().toString().length()>0
+                        &&amountInput.getText().toString().length()>0)
+                {
+                    myDB.updateData(id,name,amount,buy,sell,getApplicationContext());
+                    Intent intent = new Intent(BuyMoreActivity.this, Buy.class);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(context,context.getResources().getString(R.string.wrongInput), Toast.LENGTH_SHORT).show();
+                }
 
-                myDB.updateData(id,name,amount,buy,sell,getApplicationContext());
-                Intent intent = new Intent(BuyMoreActivity.this, Buy.class);
-                startActivity(intent);
+
+
 
 
             }

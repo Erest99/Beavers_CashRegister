@@ -50,6 +50,10 @@
             android:exported="true"
             android:label="@string/updateItem"
             android:parentActivityName=".EditSection.Storage"/>
+        <activity android:name=".SellSection.Sell"
+            android:exported="true"
+            android:label="@string/selling"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

@@ -10,12 +10,21 @@
     <string name="delete">Smazat</string>
     <string name="add">Přidat</string>
     <string name="buy">Koupit</string>
+    <string name="sell">Prodat</string>
     <string name="addbuy">Dokoupit</string>
     <string name="storage">Sklad</string>
     <string name="noData">Zatím zde nejsou žádná data :/</string>
     <string name="deleteAll">Vymazat vše?</string>
     <string name="deleteAlllonger">Opravdu si přejete vymazat všechny záznamy?</string>
+    <string name="yes">Ano</string>
+    <string name="no">Ne</string>
+    <string name="deleting">Mažu veškeré záznamy</string>
     <string name="wrongInput">Byla zadána nesprávna data.</string>
+    <string name="confirmDelete">Opravdu chcete smazat: </string>
+    <string name="selling">Prodej </string>
+    <string name="shoppingCart">Košík </string>
+    <string name="ss">Na dluh </string>
+
 
 
     <string name="data_insert_1">Data byla úspěšně uložena.</string>
@@ -37,5 +46,6 @@
     <string name="buyItem">Koupit položku</string>
     <string name="addItem">Přidat položku</string>
     <string name="updateItem">Upravit položku</string>
+
 
 </resources>

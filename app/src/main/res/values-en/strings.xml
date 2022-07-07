@@ -14,6 +14,14 @@
     <string name="addbuy">Buy more</string>
     <string name="storage">Storage</string>
     <string name="wrongInput">Wrong data entered.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="deleting">Deleting all records.</string>
+    <string name="confirmDelete">Are you sure you want to delete: </string>
+    <string name="sell">Sell</string>
+    <string name="selling">Sell </string>
+    <string name="shoppingCart">Shopping cart </string>
+    <string name="ss">Debt </string>
 
 
     <string name="noData">No data to show. :/</string>
@@ -39,4 +47,5 @@
     <string name="buyItem">Purchase item</string>
     <string name="addItem">Add item</string>
     <string name="updateItem">Update item</string>
+
 </resources>

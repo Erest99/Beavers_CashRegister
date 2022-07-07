@@ -39,8 +39,8 @@ public class Buy extends AppCompatActivity {
         setContentView(R.layout.buy_layout);
 
         recyclerView = findViewById(R.id.recyclerView);
-        empty_image = findViewById(R.id.imageViewNoDataB);
-        no_data = findViewById(R.id.textViewNoDataB);
+        empty_image = findViewById(R.id.imageViewNoDataSS);
+        no_data = findViewById(R.id.textViewNoDataSS);
         confirmButton = findViewById(R.id.confirmButton);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override

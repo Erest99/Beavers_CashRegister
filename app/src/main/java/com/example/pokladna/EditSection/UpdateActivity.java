@@ -1,9 +1,11 @@
 package com.example.pokladna.EditSection;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.pokladna.Item;
 import com.example.pokladna.MyDatabaseHelper;
 import com.example.pokladna.R;
 
@@ -56,10 +59,24 @@ public class UpdateActivity extends AppCompatActivity {
                 buy = buyInput.getText().toString().trim();
                 sell = sellInput.getText().toString().trim();
 
+                Context context = getApplicationContext();
+                if( TextUtils.isDigitsOnly(buyInput.getText())
+                        &&TextUtils.isDigitsOnly(sellInput.getText())
+                        && TextUtils.isDigitsOnly(amountInput.getText())
+                        &&nameInput.getText().toString().length()>0
+                        &&buyInput.getText().toString().length()>0
+                        &&sellInput.getText().toString().length()>0
+                        &&amountInput.getText().toString().length()>0)
+                {
+                    myDB.updateData(id,name,amount,buy,sell,getApplicationContext());
+                    Intent intent = new Intent(UpdateActivity.this, Storage.class);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(context,context.getResources().getString(R.string.wrongInput), Toast.LENGTH_SHORT).show();
+                }
 
-                myDB.updateData(id,name,amount,buy,sell,getApplicationContext());
-                Intent intent = new Intent(UpdateActivity.this, Storage.class);
-                startActivity(intent);
+
 
 
             }
@@ -102,9 +119,9 @@ public class UpdateActivity extends AppCompatActivity {
     void confirmDialog()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Delete " + name + "?");
-        builder.setMessage("Are you sure you want to delete "+ name + " ?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setTitle(getApplicationContext().getResources().getString(R.string.delete) +" "+ name + " ?");
+        builder.setMessage(getApplicationContext().getResources().getString(R.string.confirmDelete)+" "+ name + " ?");
+        builder.setPositiveButton(getApplicationContext().getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 MyDatabaseHelper myDB = new MyDatabaseHelper(UpdateActivity.this);
@@ -113,7 +130,7 @@ public class UpdateActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getApplicationContext().getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(UpdateActivity.this, Storage.class);

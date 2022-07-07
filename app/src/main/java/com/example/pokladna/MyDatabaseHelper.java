@@ -17,7 +17,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "BeaversBar.db";
     private static int DATABASE_VERSION = 1;
 
-    //TODO hodit do resource string
     private static final String TABLE_NAME = "sklad";
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_NAME = "nazev";
@@ -63,7 +62,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_AMMOUNT,item.getAmmount());
         cv.put(COLUMN_PROFILE,"BEAVERS_TEST");
 
-        //TODO protect inserting of wrong data
         long result = db.insert(TABLE_NAME, null, cv);
         if(result == -1)
         {
