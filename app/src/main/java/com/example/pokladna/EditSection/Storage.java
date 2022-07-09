@@ -98,7 +98,7 @@ public class Storage extends AppCompatActivity {
 
             while(cursor.moveToNext())
             {
-                Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4));
+                Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getString(5));
                 items.add(item);
             }
         }

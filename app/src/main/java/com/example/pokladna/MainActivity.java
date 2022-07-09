@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         buyButton = findViewById(R.id.buyButton);
         storageButton = findViewById(R.id.storageButton);
-        sellButton = findViewById(R.id.sellButton);
+        sellButton = findViewById(R.id.payButton);
         debtButton = findViewById(R.id.debtSectionButton);
 
         buyButton.setOnClickListener(new View.OnClickListener() {

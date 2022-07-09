@@ -42,7 +42,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         this.items = items;
         for (Item i:items)
         {
-            Item it = new Item(i.getId(),i.getName(),i.getBuy(),i.getSell(),0);
+            Item it = new Item(i.getId(),i.getName(),i.getBuy(),i.getSell(),0,i.getProfile());
             cart.add(it);
         }
 

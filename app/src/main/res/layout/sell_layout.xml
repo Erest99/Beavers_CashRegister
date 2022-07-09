@@ -74,7 +74,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/sellButton"
+            android:id="@+id/payButton"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginRight="2dp"
@@ -86,7 +86,7 @@
             tools:ignore="TextContrastCheck" />
 
         <Button
-            android:id="@+id/debtButton"
+            android:id="@+id/dellButton"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_marginLeft="2dp"

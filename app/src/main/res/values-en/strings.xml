@@ -54,6 +54,8 @@
 
     <string name="debts">Debts</string>
     <string name="price">Price</string>
+    <string name="pay">Pay</string>
+    <string name="search">Search</string>
 
 
 </resources>

@@ -25,6 +25,7 @@ import com.example.pokladna.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Sell extends AppCompatActivity {
 
@@ -50,7 +51,7 @@ public class Sell extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         empty_image = findViewById(R.id.imageViewNoDataSS);
         no_data = findViewById(R.id.textViewNoDataSS);
-        sellButton = findViewById(R.id.sellButton);
+        sellButton = findViewById(R.id.payButton);
         sellButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,12 +74,17 @@ public class Sell extends AppCompatActivity {
                 recyclerView.setLayoutManager(new LinearLayoutManager(Sell.this));
             }
         });
-        debtButton = findViewById(R.id.debtButton);
+        debtButton = findViewById(R.id.dellButton);
         debtButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //creates debt record
                 cart = customAdapter.getCart();
+                for (Item i:cart)
+                {
+                    i.setSell(i.getSell()*i.getAmmount());
+                    i.setBuy(i.getBuy()*i.getAmmount());
+                }
                 inputDialog(cart);
 
             }
@@ -129,7 +135,7 @@ public class Sell extends AppCompatActivity {
 
             while(cursor.moveToNext())
             {
-                Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4));
+                Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getString(5));
                 items.add(item);
             }
         }
@@ -172,7 +178,7 @@ public class Sell extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 MyDatabaseHelper myDB = new MyDatabaseHelper(Sell.this);
-                myDB.addDebt(cart,debtInput.getText().toString().trim(),getApplicationContext());
+                myDB.addDebt(cart,debtInput.getText().toString().trim().toUpperCase(Locale.ROOT),getApplicationContext());
                 sellCart(cart);
                 recreate();
             }

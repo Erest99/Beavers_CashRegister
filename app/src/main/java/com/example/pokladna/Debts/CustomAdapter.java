@@ -8,14 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pokladna.Item;
 import com.example.pokladna.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
@@ -23,6 +27,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private Context context;
     private List<Debt> debts;
     private Activity activity;
+
+    public List<Debt> getActive() {
+        return active;
+    }
+
+    List<Debt> active=new ArrayList<>();
 
     Animation translate_anim;
 
@@ -33,6 +43,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         this.activity = activity;
         this.context = context;
         this.debts = debts;
+
+        for (Debt d:debts)
+        {
+            Debt db = new Debt(d.getId(), d.getDebtor(), d.getDate(),d.getName(),d.getPrice(),d.getAmmount(),d.getProfile());
+            active.add(db);
+        }
 
     }
 
@@ -55,6 +71,19 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.buyPrice.setText(String.valueOf(debts.get(position).getPrice()));
         holder.debtor.setText(String.valueOf(debts.get(position).getDebtor()));
 
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked)
+                {
+                    active.get(position).setBeingPayed(true);
+                }
+                else
+                {
+                    active.get(position).setBeingPayed(false);
+                }
+            }
+        });
     }
 
     @Override
@@ -65,6 +94,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         TextView itemID,itemName,itemAmount,buyPrice, debtor;
+        CheckBox checkBox;
         ConstraintLayout constraintLayout;
 
         public MyViewHolder(@NonNull View itemView)
@@ -75,6 +105,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             itemAmount = itemView.findViewById(R.id.itemAmount);
             buyPrice = itemView.findViewById(R.id.Price);
             debtor = itemView.findViewById(R.id.itemDebtor);
+            checkBox = itemView.findViewById(R.id.checkBox);
             constraintLayout = itemView.findViewById(R.id.layout);
             translate_anim = AnimationUtils.loadAnimation(context,R.anim.translate_anim);
             constraintLayout.setAnimation(translate_anim);

@@ -109,25 +109,27 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_NAME,item.getName());
             cv.put(COLUMN_PRICE,item.getSell());
             cv.put(COLUMN_AMMOUNT,item.getAmmount());
-            cv.put(COLUMN_PROFILE,"BEAVERS_TEST");
+            cv.put(COLUMN_PROFILE,item.getProfile());
             cv.put(COLUMN_DEBTOR, debtor);
             Date c = Calendar.getInstance().getTime();
             cv.put(COLUMN_DATE,c.toString());
+
+            long result = db.insert(TABLE_NAME2, null, cv);
+            if(result == -1)
+            {
+                Toast.makeText(context,context.getResources().getString(R.string.data_insert_0),Toast.LENGTH_SHORT).show();
+                Log.e("db error","failed to insert " + result + " into database");
+            }
+            else
+            {
+                Toast.makeText(context,context.getResources().getString(R.string.data_insert_1),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(context,"succes",Toast.LENGTH_SHORT).show();
+            }
         }
 
 
 
-        long result = db.insert(TABLE_NAME2, null, cv);
-        if(result == -1)
-        {
-            Toast.makeText(context,context.getResources().getString(R.string.data_insert_0),Toast.LENGTH_SHORT).show();
-            Log.e("db error","failed to insert " + result + " into database");
-        }
-        else
-        {
-            Toast.makeText(context,context.getResources().getString(R.string.data_insert_1),Toast.LENGTH_SHORT).show();
-            //Toast.makeText(context,"succes",Toast.LENGTH_SHORT).show();
-        }
+
 
     }
 
@@ -179,10 +181,47 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public void updateDebts(String row_id,String debtor, String date, String name, String amount, String price, String profile, Context context )
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_DEBTOR,debtor);
+        cv.put(COLUMN_DATE,date);
+        cv.put(COLUMN_NAME, name);
+        cv.put(COLUMN_AMMOUNT, amount);
+        cv.put(COLUMN_PRICE, price);
+        cv.put(COLUMN_PROFILE,profile);
+
+        long result = db.update(TABLE_NAME2,cv,"_id=?",new String[]{row_id});
+        if (result ==-1)
+        {
+            Toast.makeText(context,context.getResources().getString(R.string.data_update_0), Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(context,context.getResources().getString(R.string.data_update_1), Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     public void deleteOneRow(String row_id,Context context)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         long result = db.delete(TABLE_NAME,"_id=?",new String[]{row_id});
+        if (result == -1)
+        {
+            Toast.makeText(context,context.getResources().getString(R.string.data_delete_0), Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(context,context.getResources().getString(R.string.data_delete_1), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void deleteOneDebt(String row_id,Context context)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(TABLE_NAME2,"_id=?",new String[]{row_id});
         if (result == -1)
         {
             Toast.makeText(context,context.getResources().getString(R.string.data_delete_0), Toast.LENGTH_SHORT).show();

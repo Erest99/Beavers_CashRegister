@@ -9,6 +9,8 @@ public class Debt {
     private String name;
     private Integer price;
     private Integer ammount;
+    private String profile;
+    private boolean beingPayed;
 
 
     public Long getId() {
@@ -59,12 +61,30 @@ public class Debt {
         this.ammount = ammount;
     }
 
-    public Debt(Long id, String debtor, String date, String name, Integer price, Integer ammount) {
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
+
+    public boolean getBeingPayed() {
+        return beingPayed;
+    }
+
+    public void setBeingPayed(boolean beingPayed) {
+        this.beingPayed = beingPayed;
+    }
+
+    public Debt(Long id, String debtor, String date, String name, Integer price, Integer ammount, String profile) {
         this.id = id;
         this.debtor = debtor;
         this.date = date;
         this.name = name;
         this.price = price;
         this.ammount = ammount;
+        this.profile = profile;
+        beingPayed = false;
     }
 }

@@ -5,8 +5,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,10 +22,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.Item;
+import com.example.pokladna.MainActivity;
 import com.example.pokladna.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Debts extends AppCompatActivity {
 
@@ -32,7 +38,10 @@ public class Debts extends AppCompatActivity {
     CustomAdapter customAdapter;
 
     ImageView empty_image;
-    TextView no_data;
+    Button payButton, deleteButton;
+    TextView no_data, moneyTv;
+    List<Debt> debts;
+    EditText filter;
 
     int money;
 
@@ -45,6 +54,77 @@ public class Debts extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         empty_image = findViewById(R.id.imageNoDataD);
         no_data = findViewById(R.id.textViewNoDataD);
+        deleteButton = findViewById(R.id.dellButton);
+        payButton = findViewById(R.id.payButton);
+        filter = findViewById(R.id.debtET);
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                debts = customAdapter.getActive();
+                for (Debt d: debts)
+                {
+                    if(d.getBeingPayed())
+                    {
+                        myDB.deleteOneDebt(d.getId().toString(),getApplicationContext());
+                        data = storeDataInList();
+
+                        customAdapter = new CustomAdapter(Debts.this, Debts.this,data);
+                        recyclerView.setAdapter(customAdapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(Debts.this));
+                    }
+                }
+            }
+        });
+
+        payButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                debts = customAdapter.getActive();
+                for (Debt d: debts)
+                {
+                    if(d.getBeingPayed())
+                    {
+                        myDB.deleteOneDebt(d.getId().toString(),getApplicationContext());
+                        money+=d.getPrice();
+                        moneyTv.setText(String.valueOf(money));
+                        customAdapter.notifyDataSetChanged();
+                        data = storeDataInList();
+
+                        customAdapter = new CustomAdapter(Debts.this, Debts.this,data);
+                        recyclerView.setAdapter(customAdapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(Debts.this));
+                    }
+                }
+            }
+        });
+
+        filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                List<Debt> search = new ArrayList<>();
+                search=storeFilteredDataInList();
+                if(filter.getText().toString().length()>0) {
+                    customAdapter = new CustomAdapter(Debts.this, Debts.this, search);
+                }else customAdapter = new CustomAdapter(Debts.this, Debts.this, data);
+                    recyclerView.setAdapter(customAdapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(Debts.this));
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         myDB = new MyDatabaseHelper(Debts.this);
         data = new ArrayList<>();
@@ -54,6 +134,13 @@ public class Debts extends AppCompatActivity {
         customAdapter = new CustomAdapter(Debts.this, Debts.this,data);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(Debts.this));
+
+        //get current money on register
+        MainActivity mainActivity = new MainActivity();
+
+        money = mainActivity.getMoney();
+        moneyTv = findViewById(R.id.moneyTextView);
+        moneyTv.setText(String.valueOf(money));
     }
 
     @Override
@@ -70,6 +157,7 @@ public class Debts extends AppCompatActivity {
     {
         List<Debt> debts = new ArrayList<Debt>();
         Cursor cursor = myDB.readAllDebts();
+
         if(cursor.getCount() == 0)
         {
             Log.w("Data display", "no data to display");
@@ -84,8 +172,36 @@ public class Debts extends AppCompatActivity {
 
             while(cursor.moveToNext())
             {
-                Debt debt = new Debt(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getInt(4),cursor.getInt(5));
+                Debt debt = new Debt(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getInt(4),cursor.getInt(5),cursor.getString(6));
                 debts.add(debt);
+
+            }
+        }
+
+        return debts;
+    }
+
+    List<Debt> storeFilteredDataInList()
+    {
+        List<Debt> debts = new ArrayList<Debt>();
+        Cursor cursor = myDB.readAllDebts();
+        String filerText = filter.getText().toString().toUpperCase(Locale.ROOT).trim();
+        if(cursor.getCount() == 0)
+        {
+            Log.w("Data display", "no data to display");
+            empty_image.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.VISIBLE);
+
+        }
+        else
+        {
+            empty_image.setVisibility(View.GONE);
+            no_data.setVisibility(View.GONE);
+
+            while(cursor.moveToNext())
+            {
+                Debt debt = new Debt(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getInt(4),cursor.getInt(5),cursor.getString(6));
+                if(debt.getDebtor().contains(filerText))debts.add(debt);
             }
         }
 

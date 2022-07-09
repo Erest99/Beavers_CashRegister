@@ -53,7 +53,7 @@ public class AddToStorage extends AppCompatActivity {
                         &&sellInput.getText().toString().length()>0
                         &&amountInput.getText().toString().length()>0)
                 {
-                    Item item = new Item(helper.readText(nameInput),helper.readNumber(buyInput),helper.readNumber(sellInput),helper.readNumber(amountInput));
+                    Item item = new Item(helper.readText(nameInput),helper.readNumber(buyInput),helper.readNumber(sellInput),helper.readNumber(amountInput),"BeaversTest");
 
                     myDB.addItem(item,getApplicationContext());
 
