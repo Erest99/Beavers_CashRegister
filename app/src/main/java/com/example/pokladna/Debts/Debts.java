@@ -28,7 +28,7 @@ public class Debts extends AppCompatActivity {
     RecyclerView recyclerView;
 
     MyDatabaseHelper myDB;
-    List<Item> data;
+    List<Debt> data;
     CustomAdapter customAdapter;
 
     ImageView empty_image;
@@ -66,9 +66,9 @@ public class Debts extends AppCompatActivity {
 
     }
 
-    List<Item> storeDataInList()
+    List<Debt> storeDataInList()
     {
-        List<Item> items = new ArrayList<Item>();
+        List<Debt> debts = new ArrayList<Debt>();
         Cursor cursor = myDB.readAllDebts();
         if(cursor.getCount() == 0)
         {
@@ -84,12 +84,12 @@ public class Debts extends AppCompatActivity {
 
             while(cursor.moveToNext())
             {
-                Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(3),cursor.getInt(4),cursor.getInt(4),cursor.getInt(5));
-                items.add(item);
+                Debt debt = new Debt(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getInt(4),cursor.getInt(5));
+                debts.add(debt);
             }
         }
 
-        return items;
+        return debts;
     }
 
     void confirmDialog()

@@ -53,6 +53,7 @@
     <string name="confirmInputDialog">Added record of debt</string>
 
     <string name="debts">Debts</string>
+    <string name="price">Price</string>
 
 
 </resources>

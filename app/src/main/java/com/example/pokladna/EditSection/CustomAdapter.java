@@ -88,7 +88,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             itemID = itemView.findViewById(R.id.itemID);
             itemName = itemView.findViewById(R.id.itemName);
             itemAmount = itemView.findViewById(R.id.itemAmount);
-            buyPrice = itemView.findViewById(R.id.buyPrice);
+            buyPrice = itemView.findViewById(R.id.Price);
             sellPrice = itemView.findViewById(R.id.sellPrice);
             constraintLayout = itemView.findViewById(R.id.buyLayout);
             translate_anim = AnimationUtils.loadAnimation(context,R.anim.translate_anim);
