@@ -47,5 +47,12 @@
     <string name="addItem">Přidat položku</string>
     <string name="updateItem">Upravit položku</string>
 
+    <string name="inputDialog1">Vytvořit dluh</string>
+    <string name="inputDialog2">Zadejte jméno dlužníka </string>
+    <string name="confirmInputDialog">Záznam dluhu přidán</string>
+
+    <string name="debts">Dluhy</string>
+
+
 
 </resources>

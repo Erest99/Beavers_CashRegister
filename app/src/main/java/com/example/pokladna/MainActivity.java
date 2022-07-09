@@ -8,12 +8,26 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.pokladna.BuySection.Buy;
+import com.example.pokladna.Debts.Debts;
 import com.example.pokladna.EditSection.Storage;
 import com.example.pokladna.SellSection.Sell;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button buyButton, storageButton, sellButton;
+
+    private int money;
+    private Boolean loaded = false;
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+
+    Button buyButton, storageButton, sellButton, debtButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         buyButton = findViewById(R.id.buyButton);
         storageButton = findViewById(R.id.storageButton);
         sellButton = findViewById(R.id.sellButton);
+        debtButton = findViewById(R.id.debtSectionButton);
 
         buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,5 +63,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        debtButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Debts.class);
+                startActivity(intent);
+            }
+        });
+
+        if(!loaded) money = loadMoney();
+
     }
+
+    private int loadMoney()
+    {
+        //TODO return saved money for profile
+        loaded = true;
+        return 0;
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.example.pokladna;
+package com.example.pokladna.DBStorage;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -11,6 +11,13 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.example.pokladna.Item;
+import com.example.pokladna.R;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
 public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     private Context context;
@@ -18,12 +25,16 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static int DATABASE_VERSION = 1;
 
     private static final String TABLE_NAME = "sklad";
+    private static final String TABLE_NAME2 = "dluhy";
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_NAME = "nazev";
     private static final String COLUMN_BUY = "kupni_cena";
     private static final String COLUMN_SELL = "prodejni_cena";
     private static final String COLUMN_AMMOUNT = "mnozstvi";
     private static final String COLUMN_PROFILE = "profil";
+    private static final String COLUMN_DEBTOR = "dluznik";
+    private static final String COLUMN_DATE = "datum";
+    private static final String COLUMN_PRICE = "cena";
 
 
     public MyDatabaseHelper(@Nullable Context context) {
@@ -42,16 +53,28 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_PROFILE + " TEXT);";
 
         db.execSQL(query);
+
+        query =
+                "CREATE TABLE "+ TABLE_NAME2 + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        COLUMN_DEBTOR + " TEXT, " +
+                        COLUMN_DATE + " TEXT, " +
+                        COLUMN_NAME + " TEXT, " +
+                        COLUMN_PRICE + " INTEGER, " +
+                        COLUMN_AMMOUNT + " INTEGER, " +
+                        COLUMN_PROFILE + " TEXT);";
+
+        db.execSQL(query);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME2);
         onCreate(db);
 
     }
 
-    public void addItem(Item item,Context context)
+    public void addItem(Item item, Context context)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -76,9 +99,54 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public void addDebt(List<Item> items,String debtor, Context context)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        for (Item item: items)
+        {
+            cv.put(COLUMN_NAME,item.getName());
+            cv.put(COLUMN_PRICE,item.getSell());
+            cv.put(COLUMN_AMMOUNT,item.getAmmount());
+            cv.put(COLUMN_PROFILE,"BEAVERS_TEST");
+            cv.put(COLUMN_DEBTOR, debtor);
+            Date c = Calendar.getInstance().getTime();
+            cv.put(COLUMN_DATE,c.toString());
+        }
+
+
+
+        long result = db.insert(TABLE_NAME2, null, cv);
+        if(result == -1)
+        {
+            Toast.makeText(context,context.getResources().getString(R.string.data_insert_0),Toast.LENGTH_SHORT).show();
+            Log.e("db error","failed to insert " + result + " into database");
+        }
+        else
+        {
+            Toast.makeText(context,context.getResources().getString(R.string.data_insert_1),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,"succes",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
     public Cursor readAllData()
     {
         String query = "SELECT * FROM " + TABLE_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null)
+        {
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor readAllDebts()
+    {
+        String query = "SELECT * FROM " + TABLE_NAME2;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
@@ -153,6 +221,20 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_NAME);
+    }
+
+    public Cursor findById(Integer id)
+    {
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE _id = " + String.valueOf(id);
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null)
+        {
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+
     }
 
 }

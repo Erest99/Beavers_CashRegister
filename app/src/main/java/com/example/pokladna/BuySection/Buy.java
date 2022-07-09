@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pokladna.Item;
-import com.example.pokladna.MyDatabaseHelper;
+import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.R;
 
 import java.util.ArrayList;
@@ -31,6 +31,8 @@ public class Buy extends AppCompatActivity {
 
     ImageView empty_image;
     TextView no_data;
+
+    int money;
 
 
     @Override

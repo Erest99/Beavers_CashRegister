@@ -41,7 +41,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         this.context = context;
         this.items = items;
         for (Item i:items)
-        {   //TODO opravit přepisovaní amount na 0 (idk why???)
+        {
             Item it = new Item(i.getId(),i.getName(),i.getBuy(),i.getSell(),0);
             cart.add(it);
         }
@@ -61,11 +61,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") final int position) {
 
-//        for (int i=0; i < cart.size();i++)
-//        {
-//            cart.get(i).setAmmount(0);
-//        }
-        //this.position = position;
         holder.itemID.setText(String.valueOf(items.get(position).getId()));
         holder.itemName.setText(String.valueOf(items.get(position).getName()));
         holder.itemAmount.setText(String.valueOf(items.get(position).getAmmount()));
@@ -112,6 +107,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 //        });
     }
 
+
     @Override
     public int getItemCount() {
         return items.size();
@@ -139,7 +135,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
             constraintLayout = itemView.findViewById(R.id.sellLayout2);
             translate_anim = AnimationUtils.loadAnimation(context,R.anim.translate_anim);
-            constraintLayout.setAnimation(translate_anim);
+            //constraintLayout.setAnimation(translate_anim);
 
         }
     }

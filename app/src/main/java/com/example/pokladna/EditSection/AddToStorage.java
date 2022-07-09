@@ -11,11 +11,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.pokladna.BuySection.Buy;
-import com.example.pokladna.BuySection.BuyToStorage;
 import com.example.pokladna.InputHelper;
 import com.example.pokladna.Item;
-import com.example.pokladna.MyDatabaseHelper;
+import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.R;
 
 public class AddToStorage extends AppCompatActivity {

@@ -54,6 +54,10 @@
             android:exported="true"
             android:label="@string/selling"
             android:parentActivityName=".MainActivity"/>
+        <activity android:name=".Debts.Debts"
+            android:exported="true"
+            android:label="@string/debts"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>

@@ -2,7 +2,6 @@ package com.example.pokladna.BuySection;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,7 @@ import android.widget.Toast;
 
 import com.example.pokladna.InputHelper;
 import com.example.pokladna.Item;
-import com.example.pokladna.MyDatabaseHelper;
+import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.R;
 
 public class BuyToStorage extends AppCompatActivity {

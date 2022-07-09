@@ -6,25 +6,21 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.pokladna.BuySection.Buy;
 import com.example.pokladna.Item;
 import com.example.pokladna.MainActivity;
-import com.example.pokladna.MyDatabaseHelper;
+import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.R;
 
 import java.util.ArrayList;
@@ -33,6 +29,7 @@ import java.util.List;
 public class Sell extends AppCompatActivity {
 
     RecyclerView recyclerView;
+    int money;
 
     Button sellButton, debtButton;
     MyDatabaseHelper myDB;
@@ -41,7 +38,8 @@ public class Sell extends AppCompatActivity {
     List<Item> cart;
 
     ImageView empty_image;
-    TextView no_data;
+    TextView no_data,moneyTv;
+
 
 
     @Override
@@ -58,13 +56,31 @@ public class Sell extends AppCompatActivity {
             public void onClick(View v) {
                 //cart contains selected items
                 cart = customAdapter.getCart();
+                sellCart(cart);
+                int sum = 0;
+                for (Item i:cart)
+                {
+                    sum += i.getSell()*i.getAmmount();
+                }
+                money+=sum;
+                moneyTv.setText(String.valueOf(money));
+                customAdapter.notifyDataSetChanged();
+
+                data = storeDataInList();
+
+                customAdapter = new CustomAdapter(Sell.this, Sell.this,data);
+                recyclerView.setAdapter(customAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(Sell.this));
             }
         });
         debtButton = findViewById(R.id.debtButton);
         debtButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO read cart, create debt record with name input in dialog and todays date
+                //creates debt record
+                cart = customAdapter.getCart();
+                inputDialog(cart);
+
             }
         });
 
@@ -76,6 +92,13 @@ public class Sell extends AppCompatActivity {
         customAdapter = new CustomAdapter(Sell.this, Sell.this,data);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(Sell.this));
+
+        //get current money on register
+        MainActivity mainActivity = new MainActivity();
+
+        money = mainActivity.getMoney();
+        moneyTv = findViewById(R.id.moneyTextView);
+        moneyTv.setText(String.valueOf(money));
     }
 
     @Override
@@ -136,5 +159,51 @@ public class Sell extends AppCompatActivity {
             }
         });
         builder.create().show();
+    }
+
+    void inputDialog(List<Item> cart)
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getApplicationContext().getResources().getString(R.string.inputDialog1));
+        builder.setMessage(getApplicationContext().getResources().getString(R.string.inputDialog2));
+        final EditText debtInput = new EditText(Sell.this);
+        builder.setView(debtInput);
+        builder.setPositiveButton(getApplicationContext().getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MyDatabaseHelper myDB = new MyDatabaseHelper(Sell.this);
+                myDB.addDebt(cart,debtInput.getText().toString().trim(),getApplicationContext());
+                sellCart(cart);
+                recreate();
+            }
+        });
+        builder.setNegativeButton(getApplicationContext().getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.create().show();
+    }
+
+    void sellCart(List<Item> cart)
+    {
+        for (Item i: cart)
+        {
+            Cursor cursor = myDB.findById(i.getId().intValue());
+            while(cursor.moveToNext())
+            {
+                myDB.updateData(String.valueOf(cursor.getInt(0)),
+                        cursor.getString(1),
+                        String.valueOf(cursor.getInt(4)-i.getAmmount()),
+                        String.valueOf(cursor.getInt(2)),
+                        String.valueOf(cursor.getInt(3)),
+                        getApplicationContext());
+            }
+
+        }
+
+
+
     }
 }

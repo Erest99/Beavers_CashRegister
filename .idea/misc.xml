@@ -10,6 +10,7 @@
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/layout/add_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/layout/buy_layout.xml" value="0.33" />
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/layout/buy_more.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/layout/debt_layout.xml" value="0.17831813576494426" />
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/layout/my_row.xml" value="0.365625" />
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/layout/my_row_buy.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/layout/my_row_buy_linear.xml" value="0.365625" />
@@ -19,6 +20,7 @@
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/layout/storage_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/layout/update_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/menu/my_menu.xml" value="0.365625" />
+        <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/menu/sell_menu.xml" value="0.365625" />
       </map>
     </option>
   </component>

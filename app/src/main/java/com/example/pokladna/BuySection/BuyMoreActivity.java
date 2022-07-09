@@ -3,9 +3,7 @@ package com.example.pokladna.BuySection;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,8 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.pokladna.Item;
-import com.example.pokladna.MyDatabaseHelper;
+import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.R;
 
 public class BuyMoreActivity extends AppCompatActivity {

@@ -48,4 +48,11 @@
     <string name="addItem">Add item</string>
     <string name="updateItem">Update item</string>
 
+    <string name="inputDialog1">Create debt record</string>
+    <string name="inputDialog2">Enter name of the debtor</string>
+    <string name="confirmInputDialog">Added record of debt</string>
+
+    <string name="debts">Debts</string>
+
+
 </resources>
