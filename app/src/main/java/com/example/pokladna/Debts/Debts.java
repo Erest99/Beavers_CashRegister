@@ -1,8 +1,10 @@
 package com.example.pokladna.Debts;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
@@ -138,7 +140,8 @@ public class Debts extends AppCompatActivity {
         //get current money on register
         MainActivity mainActivity = new MainActivity();
 
-        money = mainActivity.getMoney();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        money = sharedPref.getInt("penize", 0);
         moneyTv = findViewById(R.id.moneyTextView);
         moneyTv.setText(String.valueOf(money));
     }
@@ -229,5 +232,23 @@ public class Debts extends AppCompatActivity {
             }
         });
         builder.create().show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("penize", money);
+        editor.apply();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("penize", money);
+        editor.apply();
     }
 }

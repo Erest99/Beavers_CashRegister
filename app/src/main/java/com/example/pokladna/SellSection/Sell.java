@@ -1,11 +1,14 @@
 package com.example.pokladna.SellSection;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -99,10 +103,8 @@ public class Sell extends AppCompatActivity {
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(Sell.this));
 
-        //get current money on register
-        MainActivity mainActivity = new MainActivity();
-
-        money = mainActivity.getMoney();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        money = sharedPref.getInt("penize", 0);
         moneyTv = findViewById(R.id.moneyTextView);
         moneyTv.setText(String.valueOf(money));
     }
@@ -208,8 +210,23 @@ public class Sell extends AppCompatActivity {
             }
 
         }
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("penize", money);
+        editor.apply();
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("penize", money);
+        editor.apply();
     }
 }

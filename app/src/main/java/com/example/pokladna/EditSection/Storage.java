@@ -1,8 +1,10 @@
 package com.example.pokladna.EditSection;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -64,6 +66,9 @@ public class Storage extends AppCompatActivity {
         data = new ArrayList<>();
 
         data = storeDataInList();
+
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        money = sharedPref.getInt("penize", 0);
 
         customAdapter = new CustomAdapter(Storage.this, Storage.this,data);
         recyclerView.setAdapter(customAdapter);
@@ -144,5 +149,23 @@ public class Storage extends AppCompatActivity {
             }
         });
         builder.create().show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("penize", money);
+        editor.apply();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("penize", money);
+        editor.apply();
     }
 }

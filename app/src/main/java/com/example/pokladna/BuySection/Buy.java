@@ -1,6 +1,8 @@
 package com.example.pokladna.BuySection;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,6 +59,9 @@ public class Buy extends AppCompatActivity {
 
         data = storeDataInList();
 
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        money = sharedPref.getInt("penize", 0);
+
         customAdapter = new CustomAdapter(Buy.this,data);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(Buy.this));
@@ -84,5 +89,23 @@ public class Buy extends AppCompatActivity {
         }
 
         return items;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("penize", money);
+        editor.apply();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("penize", money);
+        editor.apply();
     }
 }

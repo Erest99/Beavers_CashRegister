@@ -2,7 +2,9 @@ package com.example.pokladna;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,17 +17,7 @@ import com.example.pokladna.SellSection.Sell;
 public class MainActivity extends AppCompatActivity {
 
 
-    private int money;
     private Boolean loaded = false;
-
-    public int getMoney() {
-        return money;
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
-    }
-
 
     Button buyButton, storageButton, sellButton, debtButton;
 
@@ -71,15 +63,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        if(!loaded) money = loadMoney();
 
     }
-
-    private int loadMoney()
-    {
-        //TODO return saved money for profile
-        loaded = true;
-        return 0;
-    }
-
 }
