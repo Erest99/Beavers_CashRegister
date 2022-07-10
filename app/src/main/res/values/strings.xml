@@ -56,6 +56,19 @@
     <string name="pay">Zaplatit</string>
     <string name="search">Hledat</string>
 
+    <string name="newSession">Nová akce</string>
+    <string name="itemsStart">zbozi_start.csv</string>
+    <string name="debtsStart">dluhy_start.csv</string>
+    <string name="itemsEnd">zbozi_konec.csv</string>
+    <string name="debtsEnd">dluhy_konec.csv</string>
+    <string name="sessionStart">Začátek nové akce</string>
+    <string name="sessionEnd">Konec akce</string>
+    <string name="startSession">Začít akci</string>
+    <string name="endSession">Ukončit akci</string>
+    <string name="endSessionConfirm">Opravdu chcete ukončit probíhající akci?</string>
+
+
+
 
 
 

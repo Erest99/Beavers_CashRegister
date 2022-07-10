@@ -57,5 +57,16 @@
     <string name="pay">Pay</string>
     <string name="search">Search</string>
 
+    <string name="newSession">Start new session</string>
+    <string name="itemsStart">goods_start.csv</string>
+    <string name="debtsStart">debts_start.csv</string>
+    <string name="itemsEnd">goods_end.csv</string>
+    <string name="debtsEnd">debts_end.csv</string>
+    <string name="sessionStart">Start of new session</string>
+    <string name="sessionEnd">End of session</string>
+    <string name="startSession">Start new session</string>
+    <string name="endSession">End current session</string>
+    <string name="endSessionConfirm">Are you sure, you want to finish current session?</string>
+
 
 </resources>
