@@ -95,4 +95,10 @@
     <string name="action_sign_in_short">1980</string>
     <string name="action_sign_in">1980</string>
 
+    <string name="balance">Balance</string>
+
+    <string name="remove">Remove</string>
+    <string name="balancedialogtitle">Update balance on register</string>
+    <string name="balancedialog">Enter amount.</string>
+
 </resources>

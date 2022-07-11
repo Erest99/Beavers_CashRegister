@@ -95,6 +95,11 @@
     <string name="action_sign_in_short">1980</string>
     <string name="action_sign_in">1980</string>
 
+    <string name="balance">Peníze</string>
+
+    <string name="remove">Odebrat</string>
+    <string name="balancedialogtitle">Upravit hotovost na kase.</string>
+    <string name="balancedialog">Doplňte sumu.</string>
 
 
 </resources>

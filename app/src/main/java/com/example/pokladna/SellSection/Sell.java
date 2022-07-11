@@ -162,31 +162,6 @@ public class Sell extends AppCompatActivity {
     }
 
 
-    void confirmDialog()
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getApplicationContext().getResources().getString(R.string.deleteAll));
-        builder.setMessage(getApplicationContext().getResources().getString(R.string.deleteAlllonger));
-        builder.setPositiveButton(getApplicationContext().getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                MyDatabaseHelper myDB = new MyDatabaseHelper(Sell.this);
-                SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-                String profile = sharedPref.getString("profile", "admin");
-                myDB.deleteAllProfileData(profile);
-                Toast.makeText(getApplicationContext(),getApplicationContext().getResources().getString(R.string.deleting),Toast.LENGTH_SHORT).show();
-                recreate();
-            }
-        });
-        builder.setNegativeButton(getApplicationContext().getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.create().show();
-    }
-
     void inputDialog(List<Item> cart)
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -255,14 +230,6 @@ public class Sell extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putInt(profiles[activeProfile], money);
-//        editor.apply();
-//    }
 
     protected void onPause(){
         super.onPause();
@@ -272,12 +239,4 @@ public class Sell extends AppCompatActivity {
         editor.apply();
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putInt(profiles[activeProfile], money);
-//        editor.apply();
-//    }
 }
