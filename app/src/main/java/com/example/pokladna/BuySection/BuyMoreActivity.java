@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -61,7 +62,9 @@ public class BuyMoreActivity extends AppCompatActivity {
                         &&sellInput.getText().toString().length()>0
                         &&amountInput.getText().toString().length()>0)
                 {
-                    myDB.updateData(id,name,amount,buy,sell,getApplicationContext());
+                    SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+                    String profile = sharedPref.getString("profile", "admin");
+                    myDB.updateData(id,name,amount,buy,sell,profile,getApplicationContext());
                     Intent intent = new Intent(BuyMoreActivity.this, Buy.class);
                     startActivity(intent);
                 }

@@ -2,25 +2,32 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.pokladna">
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission
-        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".StartClass"
         android:allowBackup="true"
-        android:requestLegacyExternalStorage="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Pokladna"
-        android:name=".StartClass"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.Login"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".BuySection.BuyMoreActivity"
             android:exported="false"
@@ -39,33 +46,34 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/cashRegister">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:label="@string/cashRegister"
+            android:parentActivityName=".ui.Login" >
         </activity>
-        <activity android:name=".EditSection.Storage"
+        <activity
+            android:name=".EditSection.Storage"
             android:exported="true"
             android:label="@string/storage"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".EditSection.AddToStorage"
+        <activity
+            android:name=".EditSection.AddToStorage"
             android:exported="true"
             android:label="@string/addItem"
-            android:parentActivityName=".EditSection.Storage"/>
-        <activity android:name=".EditSection.UpdateActivity"
+            android:parentActivityName=".EditSection.Storage" />
+        <activity
+            android:name=".EditSection.UpdateActivity"
             android:exported="true"
             android:label="@string/updateItem"
-            android:parentActivityName=".EditSection.Storage"/>
-        <activity android:name=".SellSection.Sell"
+            android:parentActivityName=".EditSection.Storage" />
+        <activity
+            android:name=".SellSection.Sell"
             android:exported="true"
             android:label="@string/selling"
-            android:parentActivityName=".MainActivity"/>
-        <activity android:name=".Debts.Debts"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".Debts.Debts"
             android:exported="true"
             android:label="@string/debts"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

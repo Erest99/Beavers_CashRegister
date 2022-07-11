@@ -1,18 +1,23 @@
 package com.example.pokladna;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -33,8 +38,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,6 +52,15 @@ public class MainActivity extends AppCompatActivity {
     private Boolean sessionStarted = false;
     List<Item> items = new ArrayList<>();
     List<Debt> debts = new ArrayList<>();
+    int money;
+
+    String admin = "admin";
+    String acko = "Atym";
+    String bcko = "Btym";
+    String[] profiles = {"penizeAdmin","penizeAtym","penizeB"};
+    String[] sessions = {"sessionAdmin","sessionAtym","sessionBtym"};
+
+    int activeProfile = 0;
 
     private final int REQUEST_PERMISSION_PHONE_STATE=1;
 
@@ -53,21 +71,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED)
-        {
-            // Permission is not granted
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-        }
-        else Log.i("permission:", "permission is granted");
+        //set profile
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        String profile = sharedPref.getString("profile", "admin");
+        if(profile.equals(admin))activeProfile = 0;
+        else if(profile.equals(acko))activeProfile = 1;
+        else if(profile.equals(bcko))activeProfile = 2;
 
-        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.MANAGE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED)
-        {
-            // Permission is not granted
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE}, 0);
-        }
-        else Log.i("permission:", "permission is granted");
+        sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        money = sharedPref.getInt(profiles[activeProfile], 0);
+
+
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.MANAGE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
+
+
+
+
 
         buyButton = findViewById(R.id.buyButton);
         storageButton = findViewById(R.id.storageButton);
@@ -75,11 +97,13 @@ public class MainActivity extends AppCompatActivity {
         debtButton = findViewById(R.id.debtSectionButton);
         sessionButton = findViewById(R.id.sessionButton);
 
+
         buyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Buy.class);
                 startActivity(intent);
+
             }
         });
 
@@ -112,19 +136,28 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Context context = MainActivity.this;
                 SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-                if(!sharedPref.getBoolean("sessionStarted",false))
+                if(!sharedPref.getBoolean(sessions[activeProfile],false))
                 {
                     Toast.makeText(context,context.getResources().getString(R.string.sessionStart),Toast.LENGTH_SHORT).show();
                     sessionButton.setText(context.getResources().getString(R.string.endSession));
                     //Start session
                     sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putBoolean("sessionStarted", true);
+                    editor.putBoolean(sessions[activeProfile], true);
                     editor.apply();
 
-                    loadData();
-                    writeData(context.getResources().getString(R.string.itemsStart),context.getResources().getString(R.string.debtsStart));
+//                    loadData();
+//                    writeData(context.getResources().getString(R.string.itemsStart),context.getResources().getString(R.string.debtsStart));
 
+                    String sdcard = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    //TODO prozkoumat
+                    Uri file = Uri.fromFile(new File(sdcard+"/Download/test.pdf"));
+
+                    loadData();
+                    createFile(file, "test_start_" + Calendar.getInstance().getTime().toString() + ".txt" );
+
+                   //openFile(file);
+                    //openDirectory(dir);
 
                 }
                 else
@@ -134,17 +167,34 @@ public class MainActivity extends AppCompatActivity {
                     sessionButton.setText(context.getResources().getString(R.string.startSession));
                     sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putBoolean("sessionStarted", false);
+                    editor.putBoolean(sessions[activeProfile], false);
                     editor.apply();
 
-                    loadData();
-                    writeData(context.getResources().getString(R.string.itemsEnd),context.getResources().getString(R.string.debtsEnd));
-                    compareData();
+//                    loadData();
+//                    writeData(context.getResources().getString(R.string.itemsEnd),context.getResources().getString(R.string.debtsEnd));
+//                    compareData();
 
+                    String sdcard = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    Uri file = Uri.fromFile(new File(sdcard+"/Download/test.pdf"));
+
+                    loadData();
+                    createFile(file,"test_konec_" + Calendar.getInstance().getTime().toString() + ".txt");
+//                    openFile(file);
+//                    openDirectory(dir);
 
                 }
             }
         });
+
+        if(!sharedPref.getBoolean(sessions[activeProfile],false))
+        {
+            sessionButton.setText(getApplicationContext().getResources().getString(R.string.startSession));
+
+        }
+        else
+        {
+            sessionButton.setText(getApplicationContext().getResources().getString(R.string.endSession));
+        }
 
 
     }
@@ -169,91 +219,158 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void writeData(String filenameItem, String filenameDebts)
-    {
-        Context context = MainActivity.this;
-        for (Item i: items)
-        {
-            writeToFile(i.getId().toString() + ",",context,filenameItem);
-            writeToFile(i.getName() + ",",context,filenameItem);
-            writeToFile(i.getBuy().toString() + ",",context,filenameItem);
-            writeToFile(i.getSell().toString() + ",",context,filenameItem);
-            writeToFile(i.getAmmount().toString() + ",",context,filenameItem);
-            writeToFile(i.getProfile() + "\n",context,filenameItem);
+    // Request code for creating a PDF document.
+    private static final int CREATE_FILE = 1;
 
-        }
+    private void createFile(Uri pickerInitialUri, String filename) {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("plain/text");
+        intent.putExtra(Intent.EXTRA_TITLE, filename);
 
-        for (Debt d: debts)
-        {
-            writeToFile(d.getId().toString() + ",",context,filenameDebts);
-            writeToFile(d.getDebtor() + ",",context,filenameDebts);
-            writeToFile(d.getDate() + ",",context,filenameDebts);
-            writeToFile(d.getName() + ",",context,filenameDebts);
-            writeToFile(d.getPrice().toString() + ",",context,filenameDebts);
-            writeToFile(d.getAmmount().toString() + ",",context,filenameDebts);
-            writeToFile(d.getProfile() + "\n",context,filenameDebts);
+        // Optionally, specify a URI for the directory that should be opened in
+        // the system file picker when your app creates the document.
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
 
-        }
-
+        startActivityForResult(intent, CREATE_FILE);
     }
 
-    private void compareData()
-    {
+    // Request code for selecting a PDF document.
+    private static final int PICK_PDF_FILE = 2;
 
+    private void openFile(Uri pickerInitialUri) {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/pdf");
+
+        // Optionally, specify a URI for the file that should appear in the
+        // system file picker when it loads.
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, pickerInitialUri);
+
+        startActivityForResult(intent, PICK_PDF_FILE);
     }
 
-    private void writeToFile(String data,Context context,String filename) {
+    public void openDirectory(Uri uriToLoad) {
+        // Choose a directory using the system's file picker.
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
 
-        String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root + "/" + context.getResources().getString(R.string.cashRegister));
-        if (!myDir.exists())
-        {
-            //TODO opravit tvorbu složky -> nevytváří se
-                myDir.mkdirs();
+        // Optionally, specify a URI for the directory that should be opened in
+        // the system file picker when it loads.
+        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uriToLoad);
 
-        }
-        if(!myDir.exists())Log.e("dir error","directory not created");
-        File file = new File (myDir, filename);
-        if (file.exists ()) file.delete ();
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(file));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
+        startActivityForResult(intent, 1);
     }
 
-    private String readFromFile(Context context) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+        super.onActivityResult(requestCode, resultCode, resultData);
+        if (requestCode == 1
 
-        String ret = "";
 
-        try {
-            InputStream inputStream = context.openFileInput("config.txt");
-
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append("\n").append(receiveString);
-                }
-
-                inputStream.close();
-                ret = stringBuilder.toString();
+                && resultCode == Activity.RESULT_OK) {
+            // The result data contains a URI for the document or directory that
+            // the user selected.
+            Uri uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+                // Perform operations on the document using its URI.
+                alterDocument(uri);
             }
         }
-        catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        }
-
-        return ret;
     }
 
+    private void alterDocument(Uri uri) {
+        try {
+            ParcelFileDescriptor pfd = MainActivity.this.getContentResolver().
+                    openFileDescriptor(uri, "w");
+            FileOutputStream fileOutputStream =
+                    new FileOutputStream(pfd.getFileDescriptor());
+
+
+
+            fileOutputStream.write(("Seznam zbozi ze zacatku akce:\n").getBytes());
+            fileOutputStream.write(("Overwritten at " + System.currentTimeMillis() +
+                    "\n").getBytes());
+            fileOutputStream.write(("Penize: ").getBytes());
+            fileOutputStream.write((String.valueOf(money) + "\n").getBytes());
+
+            fileOutputStream.write(("Zbozi:\n\n").getBytes());
+
+            for (Item i: items)
+        {
+            fileOutputStream.write((i.getId().toString() + ",").getBytes());
+            fileOutputStream.write((i.getName() + ",").getBytes());
+            fileOutputStream.write((i.getBuy().toString() + ",").getBytes());
+            fileOutputStream.write((i.getSell().toString() + ",").getBytes());
+            fileOutputStream.write((i.getAmmount().toString() + ",").getBytes());
+            fileOutputStream.write((i.getProfile() + "\n").getBytes());
+
+        }
+
+            fileOutputStream.write(("Dluhy:\n\n").getBytes());
+        for (Debt d: debts)
+        {
+            fileOutputStream.write((d.getId().toString() + ",").getBytes());
+            fileOutputStream.write((d.getDebtor() + ",").getBytes());
+            fileOutputStream.write((d.getDate() + ",").getBytes());
+            fileOutputStream.write((d.getName() + ",").getBytes());
+            fileOutputStream.write((d.getPrice().toString() + ",").getBytes());
+            fileOutputStream.write((d.getAmmount().toString() + ",").getBytes());
+            fileOutputStream.write((d.getProfile() + "\n").getBytes());
+
+        }
+
+            // Let the document provider know you're done by closing the stream.
+            fileOutputStream.close();
+            pfd.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        items = new ArrayList<>();
+        debts = new ArrayList<>();
+    }
+
+    private String readTextFromUri(Uri uri) throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
+        try (InputStream inputStream =
+                     getContentResolver().openInputStream(uri);
+             BufferedReader reader = new BufferedReader(
+                     new InputStreamReader(Objects.requireNonNull(inputStream)))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        editor.putInt(profiles[activeProfile], money);
+//        editor.apply();
+//    }
+
+    protected void onPause(){
+        super.onPause();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(profiles[activeProfile], money);
+        editor.apply();
+    }
+
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        editor.putInt(profiles[activeProfile], money);
+//        editor.apply();
+//    }
 
 }

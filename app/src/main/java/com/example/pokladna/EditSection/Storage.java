@@ -40,9 +40,15 @@ public class Storage extends AppCompatActivity {
     CustomAdapter customAdapter;
 
     ImageView empty_image;
-    TextView no_data;
+    TextView no_data, moneyTv;
 
     int money;
+
+    String admin = "admin";
+    String acko = "Atym";
+    String bcko = "Btym";
+    String[] profiles = {"penizeAdmin","penizeAtym","penizeB"};
+    int activeProfile = 0;
 
 
     @Override
@@ -51,6 +57,7 @@ public class Storage extends AppCompatActivity {
         setContentView(R.layout.storage_layout);
 
         recyclerView = findViewById(R.id.recyclerView);
+        moneyTv=findViewById(R.id.moneyTextView4);
         empty_image = findViewById(R.id.imageNoDataD);
         no_data = findViewById(R.id.textViewNoDataD);
         confirmButton = findViewById(R.id.confirmButton);
@@ -67,8 +74,16 @@ public class Storage extends AppCompatActivity {
 
         data = storeDataInList();
 
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-        money = sharedPref.getInt("penize", 0);
+        //set profile
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        String profile = sharedPref.getString("profile", "admin");
+        if(profile.equals(admin))activeProfile = 0;
+        else if(profile.equals(acko))activeProfile = 1;
+        else if(profile.equals(bcko))activeProfile = 2;
+
+        sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        money = sharedPref.getInt(profiles[activeProfile], 0);
+        moneyTv.setText(String.valueOf(money));
 
         customAdapter = new CustomAdapter(Storage.this, Storage.this,data);
         recyclerView.setAdapter(customAdapter);
@@ -88,7 +103,9 @@ public class Storage extends AppCompatActivity {
     List<Item> storeDataInList()
     {
         List<Item> items = new ArrayList<Item>();
-        Cursor cursor = myDB.readAllData();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        String profile = sharedPref.getString("profile", "admin");
+        Cursor cursor = myDB.readProfileData(profile);
         if(cursor.getCount() == 0)
         {
             Log.w("Data display", "no data to display");
@@ -137,7 +154,9 @@ public class Storage extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 MyDatabaseHelper myDB = new MyDatabaseHelper(Storage.this);
-                myDB.deleteAllData();
+                SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+                String profile = sharedPref.getString("profile", "admin");
+                myDB.deleteAllProfileData(profile);
                 Toast.makeText(getApplicationContext(),getApplicationContext().getResources().getString(R.string.deleting),Toast.LENGTH_SHORT).show();
                 recreate();
             }
@@ -151,21 +170,29 @@ public class Storage extends AppCompatActivity {
         builder.create().show();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause(){
+        super.onPause();
         SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt("penize", money);
+        editor.putInt(profiles[activeProfile], money);
         editor.apply();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt("penize", money);
-        editor.apply();
-    }
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        editor.putInt(profiles[activeProfile], money);
+//        editor.apply();
+//    }
+
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = sharedPref.edit();
+//        editor.putInt(profiles[activeProfile], money);
+//        editor.apply();
+//    }
 }

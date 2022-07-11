@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -49,9 +50,11 @@ public class BuyToStorage extends AppCompatActivity {
                         &&sellInput.getText().toString().length()>0
                         &&amountInput.getText().toString().length()>0)
                 {
-                    Item item = new Item(helper.readText(nameInput), helper.readNumber(buyInput), helper.readNumber(sellInput), helper.readNumber(amountInput),"BeaversTest");
+                    SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+                    String profile = sharedPref.getString("profile", "admin");
+                    Item item = new Item(helper.readText(nameInput), helper.readNumber(buyInput), helper.readNumber(sellInput), helper.readNumber(amountInput),profile);
 
-                    myDB.addItem(item, context);
+                    if(item.getAmmount()>0 && item.getAmmount()!=null) myDB.addItem(item, context);
 
                     Intent intent = new Intent(BuyToStorage.this, Buy.class);
                     startActivity(intent);

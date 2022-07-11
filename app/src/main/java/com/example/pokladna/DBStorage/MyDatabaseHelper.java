@@ -3,6 +3,7 @@ package com.example.pokladna.DBStorage;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -83,7 +84,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_BUY,item.getBuy());
         cv.put(COLUMN_SELL,item.getSell());
         cv.put(COLUMN_AMMOUNT,item.getAmmount());
-        cv.put(COLUMN_PROFILE,"BEAVERS_TEST");
+        cv.put(COLUMN_PROFILE,item.getProfile());
 
         long result = db.insert(TABLE_NAME, null, cv);
         if(result == -1)
@@ -159,7 +160,38 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public void updateData(String row_id, String name, String amount, String buy, String sell, Context context )
+    public Cursor readProfileData(String profile)
+    {
+
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_PROFILE + " = "+ "\""+profile+"\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null)
+        {
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+    public Cursor readProfileDebts(String profile)
+    {
+
+        String query = "SELECT * FROM " + TABLE_NAME2 + " WHERE " + COLUMN_PROFILE + " = "+ "\""+profile+"\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null)
+        {
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
+
+
+
+    public void updateData(String row_id, String name, String amount, String buy, String sell, String profile, Context context )
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -167,7 +199,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_AMMOUNT, amount);
         cv.put(COLUMN_BUY, buy);
         cv.put(COLUMN_SELL, sell);
-        cv.put(COLUMN_PROFILE,"BEAVERS_TEST");
+        cv.put(COLUMN_PROFILE,profile);
 
         long result = db.update(TABLE_NAME,cv,"_id=?",new String[]{row_id});
         if (result ==-1)
@@ -261,6 +293,19 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_NAME);
     }
+
+    public void deleteAllProfileData(String profile)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_PROFILE + " = "+ "\""+profile+"\"" );
+    }
+
+    public void deleteAllProfileDebts(String profile)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_NAME2 + " WHERE " + COLUMN_PROFILE + " = "+ "\""+profile+"\"" );
+    }
+
 
     public Cursor findById(Integer id)
     {

@@ -2,6 +2,7 @@ package com.example.pokladna.EditSection;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -53,9 +54,11 @@ public class AddToStorage extends AppCompatActivity {
                         &&sellInput.getText().toString().length()>0
                         &&amountInput.getText().toString().length()>0)
                 {
-                    Item item = new Item(helper.readText(nameInput),helper.readNumber(buyInput),helper.readNumber(sellInput),helper.readNumber(amountInput),"BeaversTest");
+                    SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+                    String profile = sharedPref.getString("profile", "admin");
+                    Item item = new Item(helper.readText(nameInput),helper.readNumber(buyInput),helper.readNumber(sellInput),helper.readNumber(amountInput),profile);
 
-                    myDB.addItem(item,getApplicationContext());
+                    if(item.getAmmount()>0 && item.getAmmount()!=null) myDB.addItem(item,getApplicationContext());
 
                     Intent intent = new Intent(AddToStorage.this, Storage.class);
                     startActivity(intent);

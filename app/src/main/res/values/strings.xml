@@ -24,7 +24,7 @@
     <string name="selling">Prodej </string>
     <string name="shoppingCart">Košík </string>
     <string name="ss">Na dluh </string>
-
+    <string name="password">Heslo</string>
 
 
     <string name="data_insert_1">Data byla úspěšně uložena.</string>
@@ -68,8 +68,32 @@
     <string name="endSessionConfirm">Opravdu chcete ukončit probíhající akci?</string>
 
 
+    <string name="adminUsername">Admin</string>
+    <string name="adminPassword">0729</string>
+
+    <string name="AUsername">A-tým</string>
+    <string name="APassword">1980</string>
+
+    <string name="BUsername">B-tým</string>
+    <string name="BPassword">1980</string>
+
+    <string-array name="Usernames">
+        <item>Admin</item>
+        <item>A-tým</item>
+        <item>B-tým</item>
+    </string-array>
+
+    <string-array name="Passwords">
+        <item>0729</item>
+        <item>1980</item>
+        <item>1980</item>
+    </string-array>
 
 
+    <string name="prompt_email">1980</string>
+    <string name="prompt_password">1980</string>
+    <string name="action_sign_in_short">1980</string>
+    <string name="action_sign_in">1980</string>
 
 
 

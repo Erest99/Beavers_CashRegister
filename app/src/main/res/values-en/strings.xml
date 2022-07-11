@@ -22,6 +22,7 @@
     <string name="selling">Sell </string>
     <string name="shoppingCart">Shopping cart </string>
     <string name="ss">Debt </string>
+    <string name="password">Password</string>
 
 
     <string name="noData">No data to show. :/</string>
@@ -68,5 +69,30 @@
     <string name="endSession">End current session</string>
     <string name="endSessionConfirm">Are you sure, you want to finish current session?</string>
 
+    <string name="adminUsername">Admin</string>
+    <string name="adminPassword">0729</string>
+
+    <string name="AUsername">team-A</string>
+    <string name="APassword">1980</string>
+
+    <string name="BUsername">team-B</string>
+    <string name="BPassword">1980</string>
+
+    <string-array name="Usernames">
+        <item>Admin</item>
+        <item>team-A</item>
+        <item>team-B</item>
+    </string-array>
+
+    <string-array name="Passwords">
+        <item>0729</item>
+        <item>1980</item>
+        <item>1980</item>
+    </string-array>
+
+    <string name="prompt_email">1980</string>
+    <string name="prompt_password">1980</string>
+    <string name="action_sign_in_short">1980</string>
+    <string name="action_sign_in">1980</string>
 
 </resources>
