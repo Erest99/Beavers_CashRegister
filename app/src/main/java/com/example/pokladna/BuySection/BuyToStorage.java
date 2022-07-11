@@ -22,6 +22,14 @@ public class BuyToStorage extends AppCompatActivity {
     Button addButton;
     EditText nameInput, buyInput, sellInput, amountInput;
 
+    int money;
+
+    String admin = "admin";
+    String acko = "Atym";
+    String bcko = "Btym";
+    String[] profiles = {"penizeAdmin","penizeAtym","penizeB"};
+    int activeProfile = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +62,12 @@ public class BuyToStorage extends AppCompatActivity {
                     String profile = sharedPref.getString("profile", "admin");
                     Item item = new Item(helper.readText(nameInput), helper.readNumber(buyInput), helper.readNumber(sellInput), helper.readNumber(amountInput),profile);
 
-                    if(item.getAmmount()>0 && item.getAmmount()!=null) myDB.addItem(item, context);
+
+                    if(item.getAmmount()>0 && item.getAmmount()!=null)
+                    {
+                        myDB.addItem(item, context);
+                        money -= item.getAmmount()* item.getBuy();
+                    }
 
                     Intent intent = new Intent(BuyToStorage.this, Buy.class);
                     startActivity(intent);
@@ -64,5 +77,23 @@ public class BuyToStorage extends AppCompatActivity {
                 }
             }
         });
+
+        //set profile
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        String profile = sharedPref.getString("profile", "admin");
+        if(profile.equals(admin))activeProfile = 0;
+        else if(profile.equals(acko))activeProfile = 1;
+        else if(profile.equals(bcko))activeProfile = 2;
+
+        sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        money = sharedPref.getInt(profiles[activeProfile], 0);
+
+    }
+    protected void onPause(){
+        super.onPause();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(profiles[activeProfile], money);
+        editor.apply();
     }
 }

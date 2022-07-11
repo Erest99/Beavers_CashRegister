@@ -24,6 +24,14 @@ public class BuyMoreActivity extends AppCompatActivity {
 
     String name,id, amount, buy, sell;
 
+    int money;
+
+    String admin = "admin";
+    String acko = "Atym";
+    String bcko = "Btym";
+    String[] profiles = {"penizeAdmin","penizeAtym","penizeB"};
+    int activeProfile = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +73,7 @@ public class BuyMoreActivity extends AppCompatActivity {
                     SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
                     String profile = sharedPref.getString("profile", "admin");
                     myDB.updateData(id,name,amount,buy,sell,profile,getApplicationContext());
+                    money -= Integer.valueOf(additionalInput.getText().toString().trim()) * Integer.valueOf(buy);
                     Intent intent = new Intent(BuyMoreActivity.this, Buy.class);
                     startActivity(intent);
                 }
@@ -78,6 +87,15 @@ public class BuyMoreActivity extends AppCompatActivity {
 
             }
         });
+        //set profile
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        String profile = sharedPref.getString("profile", "admin");
+        if(profile.equals(admin))activeProfile = 0;
+        else if(profile.equals(acko))activeProfile = 1;
+        else if(profile.equals(bcko))activeProfile = 2;
+
+        sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        money = sharedPref.getInt(profiles[activeProfile], 0);
 
 
     }
@@ -102,6 +120,14 @@ public class BuyMoreActivity extends AppCompatActivity {
         {
             Log.e("getIntentData","Wrong data");
         }
+    }
+
+    protected void onPause(){
+        super.onPause();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(profiles[activeProfile], money);
+        editor.apply();
     }
 
 }

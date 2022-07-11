@@ -116,21 +116,5 @@ public class Buy extends AppCompatActivity {
         editor.apply();
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putInt(profiles[activeProfile], money);
-//        editor.apply();
-//    }
 
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putInt(profiles[activeProfile], money);
-//        editor.apply();
-//    }
 }
