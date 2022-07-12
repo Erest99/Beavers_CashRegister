@@ -101,5 +101,9 @@
     <string name="balancedialogtitle">Upravit hotovost na kase.</string>
     <string name="balancedialog">Doplňte sumu.</string>
 
+    <string name="QRcode">QR kódem</string>
+    <string name="byCash">Hotově</string>
+    <string name="QR">Generuji QR kód</string>
+
 
 </resources>

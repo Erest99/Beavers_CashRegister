@@ -19,6 +19,7 @@ import com.example.pokladna.Item;
 import com.example.pokladna.R;
 
 import java.util.List;
+import java.util.Locale;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHolder> {
 
@@ -62,7 +63,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             public void onClick(View v) {
                 Intent intent = new Intent(context, UpdateActivity.class);
                 intent.putExtra("id",String.valueOf(items.get(position).getId()));
-                intent.putExtra("name",items.get(position).getName());
+                intent.putExtra("name",items.get(position).getName().toLowerCase(Locale.ROOT));
                 intent.putExtra("amount",String.valueOf(items.get(position).getAmmount()));
                 intent.putExtra("buy",String.valueOf(items.get(position).getBuy()));
                 intent.putExtra("sell",String.valueOf(items.get(position).getSell()));

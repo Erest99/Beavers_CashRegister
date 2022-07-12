@@ -1,7 +1,5 @@
 package com.example.pokladna.BuySection;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,10 +10,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.InputHelper;
 import com.example.pokladna.Item;
-import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.R;
+
+import java.util.Locale;
 
 public class BuyToStorage extends AppCompatActivity {
 
@@ -60,7 +62,7 @@ public class BuyToStorage extends AppCompatActivity {
                 {
                     SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
                     String profile = sharedPref.getString("profile", "admin");
-                    Item item = new Item(helper.readText(nameInput), helper.readNumber(buyInput), helper.readNumber(sellInput), helper.readNumber(amountInput),profile);
+                    Item item = new Item(helper.readText(nameInput).toLowerCase(Locale.ROOT), helper.readNumber(buyInput), helper.readNumber(sellInput), helper.readNumber(amountInput),profile);
 
 
                     if(item.getAmmount()>0 && item.getAmmount()!=null)

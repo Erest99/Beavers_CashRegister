@@ -101,4 +101,8 @@
     <string name="balancedialogtitle">Update balance on register</string>
     <string name="balancedialog">Enter amount.</string>
 
+    <string name="QRcode">QR code</string>
+    <string name="byCash">By cash</string>
+    <string name="QR">Generating QR code</string>
+
 </resources>

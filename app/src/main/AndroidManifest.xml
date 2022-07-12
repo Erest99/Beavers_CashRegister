@@ -20,8 +20,13 @@
         android:theme="@style/Theme.Pokladna"
         tools:targetApi="31">
         <activity
+            android:name=".SellSection.QR"
+            android:label="@string/QR"
+            android:parentActivityName=".SellSection.Sell"
+            android:exported="false" />
+        <activity
             android:name=".ui.Login"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,8 +52,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/cashRegister"
-            android:parentActivityName=".ui.Login" >
-        </activity>
+            android:parentActivityName=".ui.Login"></activity>
         <activity
             android:name=".EditSection.Storage"
             android:exported="true"

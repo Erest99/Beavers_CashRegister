@@ -7,8 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,16 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.pokladna.EditSection.Storage;
-import com.example.pokladna.Item;
-import com.example.pokladna.MainActivity;
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
+import com.example.pokladna.Item;
 import com.example.pokladna.R;
 
 import java.util.ArrayList;
@@ -37,7 +35,7 @@ public class Sell extends AppCompatActivity {
     RecyclerView recyclerView;
     int money;
 
-    Button sellButton, debtButton;
+    Button sellButton, debtButton, qrButton;
     MyDatabaseHelper myDB;
     List<Item> data;
     CustomAdapter customAdapter;
@@ -45,6 +43,7 @@ public class Sell extends AppCompatActivity {
 
     ImageView empty_image;
     TextView no_data,moneyTv;
+    EditText filter;
 
     String admin = "admin";
     String acko = "Atym";
@@ -62,6 +61,26 @@ public class Sell extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         empty_image = findViewById(R.id.imageViewNoDataSS);
         no_data = findViewById(R.id.textViewNoDataSS);
+        qrButton = findViewById(R.id.qrButton);
+        filter = findViewById(R.id.search);
+        qrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                cart = customAdapter.getCart();
+
+
+                int sum = 0;
+                for (Item i:cart)
+                {
+                    sum += i.getSell()*i.getAmmount();
+                }
+                Intent intent = new Intent(Sell.this, QR.class);
+                intent.putExtra("qr_cena",sum);
+                startActivity(intent);
+            }
+        });
         sellButton = findViewById(R.id.payButton);
         sellButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +140,61 @@ public class Sell extends AppCompatActivity {
         money = sharedPref.getInt(profiles[activeProfile], 0);
         moneyTv = findViewById(R.id.moneyTextView);
         moneyTv.setText(String.valueOf(money));
+
+        filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                List<Item> search = new ArrayList<>();
+                search=storeFilteredDataInList();
+                if(filter.getText().toString().length()>0) {
+                    customAdapter = new CustomAdapter(Sell.this, Sell.this, search);
+                }else customAdapter = new CustomAdapter(Sell.this, Sell.this, data);
+                recyclerView.setAdapter(customAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(Sell.this));
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+    }
+
+    List<Item> storeFilteredDataInList()
+    {
+        List<Item> items = new ArrayList<Item>();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        String profile = sharedPref.getString("profile", "admin");
+        Cursor cursor = myDB.readProfileData(profile);
+        String filerText = filter.getText().toString().toLowerCase(Locale.ROOT).trim();
+        if(cursor.getCount() == 0)
+        {
+            Log.w("Data display", "no data to display");
+            empty_image.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.VISIBLE);
+
+        }
+        else
+        {
+            empty_image.setVisibility(View.GONE);
+            no_data.setVisibility(View.GONE);
+
+            while(cursor.moveToNext())
+            {
+                Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getString(5));
+                if(item.getName().contains(filerText))items.add(item);
+            }
+        }
+
+        return items;
     }
 
     @Override
@@ -238,5 +312,7 @@ public class Sell extends AppCompatActivity {
         editor.putInt(profiles[activeProfile], money);
         editor.apply();
     }
+
+
 
 }

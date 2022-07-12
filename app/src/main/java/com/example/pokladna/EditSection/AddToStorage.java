@@ -17,6 +17,8 @@ import com.example.pokladna.Item;
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.R;
 
+import java.util.Locale;
+
 public class AddToStorage extends AppCompatActivity {
 
     Button addButton;
@@ -56,7 +58,7 @@ public class AddToStorage extends AppCompatActivity {
                 {
                     SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
                     String profile = sharedPref.getString("profile", "admin");
-                    Item item = new Item(helper.readText(nameInput),helper.readNumber(buyInput),helper.readNumber(sellInput),helper.readNumber(amountInput),profile);
+                    Item item = new Item(helper.readText(nameInput).toLowerCase(Locale.ROOT),helper.readNumber(buyInput),helper.readNumber(sellInput),helper.readNumber(amountInput),profile);
 
                     if(item.getAmmount()>0 && item.getAmmount()!=null) myDB.addItem(item,getApplicationContext());
 
