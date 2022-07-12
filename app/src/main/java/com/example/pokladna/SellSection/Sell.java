@@ -42,7 +42,9 @@ public class Sell extends AppCompatActivity {
     List<Item> cart;
 
     ImageView empty_image;
-    TextView no_data,moneyTv;
+    TextView no_data;
+    TextView moneyTv;
+    static TextView priceTv;
     EditText filter;
 
     String admin = "admin";
@@ -63,6 +65,7 @@ public class Sell extends AppCompatActivity {
         no_data = findViewById(R.id.textViewNoDataSS);
         qrButton = findViewById(R.id.qrButton);
         filter = findViewById(R.id.search);
+        priceTv = findViewById(R.id.payTextView);
         qrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,6 +82,8 @@ public class Sell extends AppCompatActivity {
                 Intent intent = new Intent(Sell.this, QR.class);
                 intent.putExtra("qr_cena",sum);
                 startActivity(intent);
+
+                priceTv.setText("0");
             }
         });
         sellButton = findViewById(R.id.payButton);
@@ -102,6 +107,8 @@ public class Sell extends AppCompatActivity {
                 customAdapter = new CustomAdapter(Sell.this, Sell.this,data);
                 recyclerView.setAdapter(customAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(Sell.this));
+
+                priceTv.setText("0");
             }
         });
         debtButton = findViewById(R.id.dellButton);
@@ -117,6 +124,7 @@ public class Sell extends AppCompatActivity {
                 }
                 inputDialog(cart);
 
+                priceTv.setText("0");
             }
         });
 
@@ -168,6 +176,17 @@ public class Sell extends AppCompatActivity {
 
     }
 
+    public void updatePayAmount()
+    {
+        int price = 0;
+        cart = customAdapter.getCart();
+        for (Item i:cart) {
+
+            price += i.getSell()*i.getAmmount();
+            priceTv.setText(String.valueOf(price));
+        }
+    }
+
     List<Item> storeFilteredDataInList()
     {
         List<Item> items = new ArrayList<Item>();
@@ -189,7 +208,7 @@ public class Sell extends AppCompatActivity {
 
             while(cursor.moveToNext())
             {
-                Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getString(5));
+                Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getInt(5),cursor.getString(6));
                 if(item.getName().contains(filerText))items.add(item);
             }
         }
@@ -227,7 +246,7 @@ public class Sell extends AppCompatActivity {
 
             while(cursor.moveToNext())
             {
-                Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getString(5));
+                Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getInt(5),cursor.getString(6));
                 items.add(item);
             }
         }
@@ -295,6 +314,7 @@ public class Sell extends AppCompatActivity {
                         String.valueOf(cursor.getInt(4)-i.getAmmount()),
                         String.valueOf(cursor.getInt(2)),
                         String.valueOf(cursor.getInt(3)),
+                        String.valueOf(cursor.getInt(5)),
                         profile,
                         getApplicationContext());
                 }

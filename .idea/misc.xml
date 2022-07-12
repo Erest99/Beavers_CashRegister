@@ -26,6 +26,8 @@
         <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/drawable/ic_add.xml" value="0.336" />
         <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.23560910307898258" />
         <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout-w936dp/activity_login.xml" value="0.275" />
+        <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout-w936dp/profiles_layout.xml" value="0.275" />
+        <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/activity_admin.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/activity_login2.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/activity_main.xml" value="0.2128623188405797" />
@@ -34,7 +36,10 @@
         <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/buy_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/buy_more.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/debt_layout.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/my_row.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/my_row_sell.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/new_profile.xml" value="0.365625" />
+        <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/profiles.xml" value="0.365625" />
         <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/sell_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/storage_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Horky/StudioProjects/Beavers_CashRegister/app/src/main/res/layout/update_layout.xml" value="0.36666666666666664" />

@@ -1,6 +1,8 @@
-package com.example.pokladna.BuySection;
+package com.example.pokladna.Admin.adminStorage;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -17,35 +19,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.R;
 
-public class BuyMoreActivity extends AppCompatActivity {
+public class UpdateActivity extends AppCompatActivity {
 
-    EditText nameInput, amountInput,buyInput,sellInput, additionalInput;
-    Button confirmButton;
+    EditText nameInput, amountInput,buyInput,sellInput, taxInput;
+    Button confirmButton, deleteButton;
 
-    String name,id, amount, buy, sell;
-
-    int money;
-    String tax;
-
-    String admin = "admin";
-    String acko = "Atym";
-    String bcko = "Btym";
-    String[] profiles = {"penizeAdmin","penizeAtym","penizeB"};
-    int activeProfile = 0;
+    String name,id, amount, buy, sell,tax;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.buy_more);
-        MyDatabaseHelper myDB = new MyDatabaseHelper(BuyMoreActivity.this);
+        setContentView(R.layout.update_layout);
+        MyDatabaseHelper myDB = new MyDatabaseHelper(UpdateActivity.this);
 
 
         nameInput = findViewById(R.id.editTextNameUpdate);
         amountInput = findViewById(R.id.editTextAmmountUpdate);
         buyInput = findViewById(R.id.editTextBuyUpdate);
         sellInput = findViewById(R.id.editTextSellUpdate);
+        taxInput = findViewById(R.id.taxInput2);
         confirmButton = findViewById(R.id.updateButton);
-        additionalInput = findViewById(R.id.addInput);
+        deleteButton = findViewById(R.id.deleteButton);
 
         //prepare data
         getAndSetIntentData();
@@ -58,9 +52,10 @@ public class BuyMoreActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 name = nameInput.getText().toString().trim();
-                amount = String.valueOf(Integer.valueOf(amountInput.getText().toString().trim()) + Integer.valueOf(additionalInput.getText().toString().trim()));
+                amount = amountInput.getText().toString().trim();
                 buy = buyInput.getText().toString().trim();
                 sell = sellInput.getText().toString().trim();
+                tax = taxInput.getText().toString().trim();
 
                 Context context = getApplicationContext();
                 if( TextUtils.isDigitsOnly(buyInput.getText())
@@ -69,13 +64,13 @@ public class BuyMoreActivity extends AppCompatActivity {
                         &&nameInput.getText().toString().length()>0
                         &&buyInput.getText().toString().length()>0
                         &&sellInput.getText().toString().length()>0
-                        &&amountInput.getText().toString().length()>0)
+                        &&amountInput.getText().toString().length()>0
+                        &&taxInput.getText().toString().length()>0)
                 {
                     SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
                     String profile = sharedPref.getString("profile", "admin");
                     myDB.updateData(id,name,amount,buy,sell,tax,profile,getApplicationContext());
-                    money -= Integer.valueOf(additionalInput.getText().toString().trim()) * Integer.valueOf(buy);
-                    Intent intent = new Intent(BuyMoreActivity.this, Buy.class);
+                    Intent intent = new Intent(UpdateActivity.this, Storage.class);
                     startActivity(intent);
                 }
                 else {
@@ -85,18 +80,17 @@ public class BuyMoreActivity extends AppCompatActivity {
 
 
 
+            }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                confirmDialog();
 
             }
         });
-        //set profile
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-        String profile = sharedPref.getString("profile", "admin");
-        if(profile.equals(admin))activeProfile = 0;
-        else if(profile.equals(acko))activeProfile = 1;
-        else if(profile.equals(bcko))activeProfile = 2;
-
-        sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-        money = sharedPref.getInt(profiles[activeProfile], 0);
 
 
     }
@@ -111,7 +105,6 @@ public class BuyMoreActivity extends AppCompatActivity {
             amount = getIntent().getStringExtra("amount");
             buy = getIntent().getStringExtra("buy");
             sell = getIntent().getStringExtra("sell");
-            tax = getIntent().getStringExtra("tax");
 
             nameInput.setText(name);
             amountInput.setText(amount);
@@ -124,12 +117,29 @@ public class BuyMoreActivity extends AppCompatActivity {
         }
     }
 
-    protected void onPause(){
-        super.onPause();
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(profiles[activeProfile], money);
-        editor.apply();
+    void confirmDialog()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getApplicationContext().getResources().getString(R.string.delete) +" "+ name + " ?");
+        builder.setMessage(getApplicationContext().getResources().getString(R.string.confirmDelete)+" "+ name + " ?");
+        builder.setPositiveButton(getApplicationContext().getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                MyDatabaseHelper myDB = new MyDatabaseHelper(UpdateActivity.this);
+                myDB.deleteOneRow(id,getApplicationContext());
+                Intent intent = new Intent(UpdateActivity.this, Storage.class);
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton(getApplicationContext().getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(UpdateActivity.this, Storage.class);
+                startActivity(intent);
+
+            }
+        });
+        builder.create().show();
     }
 
 }

@@ -100,7 +100,7 @@ public class Buy extends AppCompatActivity {
             no_data.setVisibility(View.GONE);
             while(cursor.moveToNext())
             {
-                Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getString(5));
+                Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getInt(5),cursor.getString(6));
                 items.add(item);
             }
         }

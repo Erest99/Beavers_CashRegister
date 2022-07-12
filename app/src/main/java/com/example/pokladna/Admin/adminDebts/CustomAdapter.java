@@ -1,4 +1,4 @@
-package com.example.pokladna.Debts;
+package com.example.pokladna.Admin.adminDebts;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

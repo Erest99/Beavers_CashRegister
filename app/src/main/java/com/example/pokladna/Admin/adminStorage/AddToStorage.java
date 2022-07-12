@@ -1,4 +1,4 @@
-package com.example.pokladna.BuySection;
+package com.example.pokladna.Admin.adminStorage;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,18 +19,10 @@ import com.example.pokladna.R;
 
 import java.util.Locale;
 
-public class BuyToStorage extends AppCompatActivity {
+public class AddToStorage extends AppCompatActivity {
 
     Button addButton;
     EditText nameInput, buyInput, sellInput, amountInput, taxInput;
-
-    int money;
-
-    String admin = "admin";
-    String acko = "Atym";
-    String bcko = "Btym";
-    String[] profiles = {"penizeAdmin","penizeAtym","penizeB"};
-    int activeProfile = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +42,12 @@ public class BuyToStorage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                MyDatabaseHelper myDB = new MyDatabaseHelper(BuyToStorage.this);
+                MyDatabaseHelper myDB = new MyDatabaseHelper(AddToStorage.this);
+
+                //Item item = new Item(nameInput.getText().toString().trim(),Integer.valueOf(buyInput.getText().toString().trim()),Integer.valueOf(sellInput.getText().toString().trim()),Integer.valueOf(amountInput.getText().toString().trim()));
+
                 InputHelper helper = new InputHelper();
+
                 Context context = getApplicationContext();
                 if( TextUtils.isDigitsOnly(buyInput.getText())
                         &&TextUtils.isDigitsOnly(sellInput.getText())
@@ -64,41 +60,19 @@ public class BuyToStorage extends AppCompatActivity {
                 {
                     SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
                     String profile = sharedPref.getString("profile", "admin");
-                    Item item = new Item(helper.readText(nameInput).toLowerCase(Locale.ROOT), helper.readNumber(buyInput),
-                            helper.readNumber(sellInput), helper.readNumber(amountInput),helper.readNumber(taxInput),profile);
+                    Item item = new Item(helper.readText(nameInput).toLowerCase(Locale.ROOT),helper.readNumber(buyInput),helper.readNumber(sellInput),helper.readNumber(amountInput),helper.readNumber(taxInput),profile);
 
+                    if(item.getAmmount()>0 && item.getAmmount()!=null) myDB.addItem(item,getApplicationContext());
 
-                    if(item.getAmmount()>0 && item.getAmmount()!=null)
-                    {
-                        myDB.addItem(item, context);
-                        money -= item.getAmmount()* item.getBuy();
-                    }
-
-                    Intent intent = new Intent(BuyToStorage.this, Buy.class);
+                    Intent intent = new Intent(AddToStorage.this, Storage.class);
                     startActivity(intent);
                 }
                 else {
                     Toast.makeText(context,context.getResources().getString(R.string.wrongInput), Toast.LENGTH_SHORT).show();
                 }
+
+
             }
         });
-
-        //set profile
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-        String profile = sharedPref.getString("profile", "admin");
-        if(profile.equals(admin))activeProfile = 0;
-        else if(profile.equals(acko))activeProfile = 1;
-        else if(profile.equals(bcko))activeProfile = 2;
-
-        sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-        money = sharedPref.getInt(profiles[activeProfile], 0);
-
-    }
-    protected void onPause(){
-        super.onPause();
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(profiles[activeProfile], money);
-        editor.apply();
     }
 }

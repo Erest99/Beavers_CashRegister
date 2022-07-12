@@ -1,4 +1,4 @@
-package com.example.pokladna.EditSection;
+package com.example.pokladna.Admin.adminStorage;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

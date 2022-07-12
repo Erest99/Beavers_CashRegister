@@ -21,10 +21,10 @@ import com.example.pokladna.R;
 
 public class UpdateActivity extends AppCompatActivity {
 
-    EditText nameInput, amountInput,buyInput,sellInput;
+    EditText nameInput, amountInput,buyInput,sellInput, taxInput;
     Button confirmButton, deleteButton;
 
-    String name,id, amount, buy, sell;
+    String name,id, amount, buy, sell,tax;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,7 @@ public class UpdateActivity extends AppCompatActivity {
         amountInput = findViewById(R.id.editTextAmmountUpdate);
         buyInput = findViewById(R.id.editTextBuyUpdate);
         sellInput = findViewById(R.id.editTextSellUpdate);
+        taxInput = findViewById(R.id.taxInput2);
         confirmButton = findViewById(R.id.updateButton);
         deleteButton = findViewById(R.id.deleteButton);
 
@@ -54,6 +55,7 @@ public class UpdateActivity extends AppCompatActivity {
                 amount = amountInput.getText().toString().trim();
                 buy = buyInput.getText().toString().trim();
                 sell = sellInput.getText().toString().trim();
+                tax = taxInput.getText().toString().trim();
 
                 Context context = getApplicationContext();
                 if( TextUtils.isDigitsOnly(buyInput.getText())
@@ -62,11 +64,12 @@ public class UpdateActivity extends AppCompatActivity {
                         &&nameInput.getText().toString().length()>0
                         &&buyInput.getText().toString().length()>0
                         &&sellInput.getText().toString().length()>0
-                        &&amountInput.getText().toString().length()>0)
+                        &&amountInput.getText().toString().length()>0
+                        &&taxInput.getText().toString().length()>0)
                 {
                     SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
                     String profile = sharedPref.getString("profile", "admin");
-                    myDB.updateData(id,name,amount,buy,sell,profile,getApplicationContext());
+                    myDB.updateData(id,name,amount,buy,sell,tax,profile,getApplicationContext());
                     Intent intent = new Intent(UpdateActivity.this, Storage.class);
                     startActivity(intent);
                 }

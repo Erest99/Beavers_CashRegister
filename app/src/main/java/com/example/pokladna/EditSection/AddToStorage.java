@@ -22,7 +22,7 @@ import java.util.Locale;
 public class AddToStorage extends AppCompatActivity {
 
     Button addButton;
-    EditText nameInput, buyInput, sellInput, amountInput;
+    EditText nameInput, buyInput, sellInput, amountInput, taxInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +34,7 @@ public class AddToStorage extends AppCompatActivity {
         buyInput = findViewById(R.id.editTextBuyUpdate);
         sellInput = findViewById(R.id.editTextSellUpdate);
         amountInput = findViewById(R.id.editTextAmmountUpdate);
+        taxInput = findViewById(R.id.taxInput);
 
 
 
@@ -54,11 +55,12 @@ public class AddToStorage extends AppCompatActivity {
                         &&nameInput.getText().toString().length()>0
                         &&buyInput.getText().toString().length()>0
                         &&sellInput.getText().toString().length()>0
-                        &&amountInput.getText().toString().length()>0)
+                        &&amountInput.getText().toString().length()>0
+                        &&taxInput.getText().toString().length()>0)
                 {
                     SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
                     String profile = sharedPref.getString("profile", "admin");
-                    Item item = new Item(helper.readText(nameInput).toLowerCase(Locale.ROOT),helper.readNumber(buyInput),helper.readNumber(sellInput),helper.readNumber(amountInput),profile);
+                    Item item = new Item(helper.readText(nameInput).toLowerCase(Locale.ROOT),helper.readNumber(buyInput),helper.readNumber(sellInput),helper.readNumber(amountInput),helper.readNumber(taxInput),profile);
 
                     if(item.getAmmount()>0 && item.getAmmount()!=null) myDB.addItem(item,getApplicationContext());
 
