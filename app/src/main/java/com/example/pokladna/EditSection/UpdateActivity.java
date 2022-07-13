@@ -105,11 +105,13 @@ public class UpdateActivity extends AppCompatActivity {
             amount = getIntent().getStringExtra("amount");
             buy = getIntent().getStringExtra("buy");
             sell = getIntent().getStringExtra("sell");
+            tax = getIntent().getStringExtra("tax");
 
             nameInput.setText(name);
             amountInput.setText(amount);
             buyInput.setText(buy);
             sellInput.setText(sell);
+            taxInput.setText(tax);
         }
         else
         {

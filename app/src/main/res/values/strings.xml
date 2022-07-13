@@ -114,5 +114,13 @@
     <string name="deleteProfile">Smazat profil</string>
     <string name="paswword">Heslo</string>
 
+    <string name="newPassword">Zadejte nové heslo:</string>
+    <string name="cancel">Zrušit</string>
+
+    <string name="addProfile">Přidat profil</string>
+    <string name="allData">Všechny záznamy</string>
+
+
+
 
 </resources>

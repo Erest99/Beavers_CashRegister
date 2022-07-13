@@ -47,10 +47,10 @@ public class Sell extends AppCompatActivity {
     static TextView priceTv;
     EditText filter;
 
-    String admin = "admin";
-    String acko = "Atym";
-    String bcko = "Btym";
-    String[] profiles = {"penizeAdmin","penizeAtym","penizeB"};
+    String[] profiles;
+    String[] profilesMoney = {"cashAdmin","cash1","cash2","cash3","cash4","cash5","cash6","cash7","cash7","cash8","cash9"};
+    final String PROFILES = "profiles";
+
     int activeProfile = 0;
 
 
@@ -140,12 +140,20 @@ public class Sell extends AppCompatActivity {
         //set profile
         SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
         String profile = sharedPref.getString("profile", "admin");
-        if(profile.equals(admin))activeProfile = 0;
-        else if(profile.equals(acko))activeProfile = 1;
-        else if(profile.equals(bcko))activeProfile = 2;
+        profiles = sharedPref.getString(PROFILES,"admin").split(",");
+        if(profile.equals(profiles[0]))activeProfile = 0;
+        else if(profile.equals(profiles[1]))activeProfile = 1;
+        else if(profile.equals(profiles[2]))activeProfile = 2;
+        else if(profile.equals(profiles[3]))activeProfile = 3;
+        else if(profile.equals(profiles[4]))activeProfile = 4;
+        else if(profile.equals(profiles[5]))activeProfile = 5;
+        else if(profile.equals(profiles[6]))activeProfile = 6;
+        else if(profile.equals(profiles[7]))activeProfile = 7;
+        else if(profile.equals(profiles[8]))activeProfile = 8;
+        else if(profile.equals(profiles[9]))activeProfile = 9;
 
         sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-        money = sharedPref.getInt(profiles[activeProfile], 0);
+        money = sharedPref.getInt(profilesMoney[activeProfile], 0);
         moneyTv = findViewById(R.id.moneyTextView);
         moneyTv.setText(String.valueOf(money));
 
@@ -329,7 +337,7 @@ public class Sell extends AppCompatActivity {
         super.onPause();
         SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(profiles[activeProfile], money);
+        editor.putInt(profilesMoney[activeProfile], money);
         editor.apply();
     }
 

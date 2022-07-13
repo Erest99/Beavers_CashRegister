@@ -44,7 +44,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.my_row_buy, parent, false);
+        View view = inflater.inflate(R.layout.adm_storage_row, parent, false);
         return new MyViewHolder(view);
     }
 
@@ -57,6 +57,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         holder.itemAmount.setText(String.valueOf(items.get(position).getAmmount()));
         holder.buyPrice.setText(String.valueOf(items.get(position).getBuy()));
         holder.sellPrice.setText(String.valueOf(items.get(position).getSell()));
+        holder.profileView.setText(String.valueOf(items.get(position).getProfile()));
+        holder.taxView.setText(String.valueOf(items.get(position).getTax()));
+
 
         holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +71,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 intent.putExtra("buy",String.valueOf(items.get(position).getBuy()));
                 intent.putExtra("sell",String.valueOf(items.get(position).getSell()));
                 intent.putExtra("tax",String.valueOf(items.get(position).getTax()));
+                intent.putExtra("profile",String.valueOf(items.get(position).getProfile()));
                 //context.startActivity(intent);
                 activity.startActivityForResult(intent,1);
             }
@@ -81,7 +85,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView itemID,itemName,itemAmount,buyPrice, sellPrice;
+        TextView itemID,itemName,itemAmount,buyPrice, sellPrice, profileView, taxView;
         ConstraintLayout constraintLayout;
 
         public MyViewHolder(@NonNull View itemView)
@@ -92,7 +96,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             itemAmount = itemView.findViewById(R.id.itemAmount);
             buyPrice = itemView.findViewById(R.id.Price);
             sellPrice = itemView.findViewById(R.id.sellPrice);
-            constraintLayout = itemView.findViewById(R.id.buyLayout);
+            profileView = itemView.findViewById(R.id.textViewProfile);
+            taxView = itemView.findViewById(R.id.tax);
+            constraintLayout = itemView.findViewById(R.id.theLayout);
             translate_anim = AnimationUtils.loadAnimation(context,R.anim.translate_anim);
             constraintLayout.setAnimation(translate_anim);
 

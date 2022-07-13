@@ -114,5 +114,11 @@
     <string name="deleteProfile">Smazat profil</string>
     <string name="paswword">Password</string>
 
+    <string name="newPassword">Enter new password:</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="addProfile">Add profile</string>
+    <string name="allData">All records</string>
+
 
 </resources>

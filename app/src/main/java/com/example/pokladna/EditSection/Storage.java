@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,6 +33,7 @@ import com.example.pokladna.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Storage extends AppCompatActivity {
 
@@ -44,12 +47,14 @@ public class Storage extends AppCompatActivity {
     ImageView empty_image;
     TextView no_data, moneyTv;
 
+    EditText filter;
+
     int money;
 
-    String admin = "admin";
-    String acko = "Atym";
-    String bcko = "Btym";
-    String[] profiles = {"penizeAdmin", "penizeAtym", "penizeB"};
+    String[] profiles;
+    String[] profilesMoney = {"cashAdmin","cash1","cash2","cash3","cash4","cash5","cash6","cash7","cash7","cash8","cash9"};
+    final String PROFILES = "profiles";
+
     int activeProfile = 0;
 
 
@@ -62,6 +67,7 @@ public class Storage extends AppCompatActivity {
         moneyTv = findViewById(R.id.moneyTextView4);
         empty_image = findViewById(R.id.imageNoDataD);
         no_data = findViewById(R.id.textViewNoDataD);
+        filter = findViewById(R.id.search2);
         balanceButton = findViewById(R.id.balanceButton);
         balanceButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,17 +92,50 @@ public class Storage extends AppCompatActivity {
         //set profile
         SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
         String profile = sharedPref.getString("profile", "admin");
-        if (profile.equals(admin)) activeProfile = 0;
-        else if (profile.equals(acko)) activeProfile = 1;
-        else if (profile.equals(bcko)) activeProfile = 2;
+        profiles = sharedPref.getString(PROFILES,"admin").split(",");
+        if(profile.equals(profiles[0]))activeProfile = 0;
+        else if(profile.equals(profiles[1]))activeProfile = 1;
+        else if(profile.equals(profiles[2]))activeProfile = 2;
+        else if(profile.equals(profiles[3]))activeProfile = 3;
+        else if(profile.equals(profiles[4]))activeProfile = 4;
+        else if(profile.equals(profiles[5]))activeProfile = 5;
+        else if(profile.equals(profiles[6]))activeProfile = 6;
+        else if(profile.equals(profiles[7]))activeProfile = 7;
+        else if(profile.equals(profiles[8]))activeProfile = 8;
+        else if(profile.equals(profiles[9]))activeProfile = 9;
 
         sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-        money = sharedPref.getInt(profiles[activeProfile], 0);
+        money = sharedPref.getInt(profilesMoney[activeProfile], 0);
         moneyTv.setText(String.valueOf(money));
 
         customAdapter = new CustomAdapter(Storage.this, Storage.this, data);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(Storage.this));
+
+        filter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                List<Item> search = new ArrayList<>();
+                search=storeFilteredDataInList();
+                if(filter.getText().toString().length()>0) {
+                    customAdapter = new CustomAdapter(Storage.this, Storage.this, search);
+                }else customAdapter = new CustomAdapter(Storage.this, Storage.this, data);
+                recyclerView.setAdapter(customAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(Storage.this));
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -106,6 +145,35 @@ public class Storage extends AppCompatActivity {
             recreate();
         }
 
+    }
+
+    List<Item> storeFilteredDataInList()
+    {
+        List<Item> items = new ArrayList<Item>();
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        String profile = sharedPref.getString("profile", "admin");
+        Cursor cursor = myDB.readProfileData(profile);
+        String filerText = filter.getText().toString().toLowerCase(Locale.ROOT).trim();
+        if(cursor.getCount() == 0)
+        {
+            Log.w("Data display", "no data to display");
+            empty_image.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.VISIBLE);
+
+        }
+        else
+        {
+            empty_image.setVisibility(View.GONE);
+            no_data.setVisibility(View.GONE);
+
+            while(cursor.moveToNext())
+            {
+                Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getInt(5),cursor.getString(6));
+                if(item.getName().contains(filerText))items.add(item);
+            }
+        }
+
+        return items;
     }
 
     List<Item> storeDataInList() {
@@ -175,7 +243,7 @@ public class Storage extends AppCompatActivity {
         super.onPause();
         SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(profiles[activeProfile], money);
+        editor.putInt(profilesMoney[activeProfile], money);
         editor.apply();
     }
 
@@ -189,6 +257,7 @@ public class Storage extends AppCompatActivity {
         builder.setPositiveButton(getApplicationContext().getResources().getString(R.string.add), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if(balanceInput.getText().toString().trim().length()>0)
                 money += Integer.valueOf(balanceInput.getText().toString().trim());
 
                 Intent intent = new Intent(Storage.this, Storage.class);
@@ -202,6 +271,7 @@ public class Storage extends AppCompatActivity {
         builder.setNegativeButton(getApplicationContext().getResources().getString(R.string.remove), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if(balanceInput.getText().toString().trim().length()>0)
                 money -= Integer.valueOf(balanceInput.getText().toString().trim());
 
                 Intent intent = new Intent(Storage.this, Storage.class);

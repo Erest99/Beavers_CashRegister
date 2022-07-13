@@ -10,7 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="050dp"
         android:layout_marginTop="32dp"
-        android:text="@string/newProfile"
+        android:text="@string/changePassword"
         app:layout_constraintEnd_toEndOf="@+id/spinner2"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/spinner2"

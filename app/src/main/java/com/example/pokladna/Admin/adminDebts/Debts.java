@@ -45,19 +45,13 @@ public class Debts extends AppCompatActivity {
     List<Debt> debts;
     EditText filter;
 
-    int money;
 
-    String admin = "admin";
-    String acko = "Atym";
-    String bcko = "Btym";
-    String[] profiles = {"penizeAdmin","penizeAtym","penizeB"};
-    int activeProfile = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.debt_layout);
+        setContentView(R.layout.admin_debt);
 
         recyclerView = findViewById(R.id.recyclerView);
         empty_image = findViewById(R.id.imageNoDataD);
@@ -89,29 +83,6 @@ public class Debts extends AppCompatActivity {
             }
         });
 
-        payButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                debts = customAdapter.getActive();
-                for (Debt d: debts)
-                {
-                    if(d.getBeingPayed())
-                    {
-                        myDB.deleteOneDebt(d.getId().toString(),getApplicationContext());
-                        money+=d.getPrice();
-                        moneyTv.setText(String.valueOf(money));
-                        customAdapter.notifyDataSetChanged();
-                        data = storeDataInList();
-
-                        customAdapter = new CustomAdapter(Debts.this, Debts.this,data);
-                        recyclerView.setAdapter(customAdapter);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(Debts.this));
-                    }
-                }
-                payTv.setText("0");
-            }
-        });
 
         filter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -150,17 +121,6 @@ public class Debts extends AppCompatActivity {
         //get current money on register
         MainActivity mainActivity = new MainActivity();
 
-        //set profile
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-        String profile = sharedPref.getString("profile", "admin");
-        if(profile.equals(admin))activeProfile = 0;
-        else if(profile.equals(acko))activeProfile = 1;
-        else if(profile.equals(bcko))activeProfile = 2;
-
-        sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-        money = sharedPref.getInt(profiles[activeProfile], 0);
-        moneyTv = findViewById(R.id.moneyTextView);
-        moneyTv.setText(String.valueOf(money));
     }
 
     @Override
@@ -256,14 +216,6 @@ public class Debts extends AppCompatActivity {
             }
         });
         builder.create().show();
-    }
-
-    protected void onPause(){
-        super.onPause();
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(profiles[activeProfile], money);
-        editor.apply();
     }
 
 }
