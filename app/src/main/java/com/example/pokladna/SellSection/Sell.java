@@ -186,8 +186,8 @@ public class Sell extends AppCompatActivity {
             }
         });
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+//        recyclerView.addItemDecoration(dividerItemDecoration);
 
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -217,7 +217,17 @@ public class Sell extends AppCompatActivity {
             editor.putString(ORDER, sb.toString());
             editor.apply();
 
+
             return false;
+        }
+
+        @Override
+        public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+            super.onSelectedChanged(viewHolder, actionState);
+            if(actionState == ItemTouchHelper.ACTION_STATE_IDLE)
+            {
+                refresh();
+            }
         }
 
         @Override
@@ -227,16 +237,44 @@ public class Sell extends AppCompatActivity {
     };
 
 
-    public void updatePayAmount()
-    {
-        int price = 0;
-        cart = customAdapter.getCart();
-        for (Item i:cart) {
 
-            price += i.getSell()*i.getAmmount();
-            priceTv.setText(String.valueOf(price));
+    ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
+        @Override
+        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            return 0;
         }
-    }
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            int fromPosition = viewHolder.getAdapterPosition();
+            int toPosition = target.getAdapterPosition();
+            Collections.swap(data, fromPosition, toPosition);
+            recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
+
+            final String ORDER = "order";
+            StringBuilder sb = new StringBuilder();
+            ArrayList<Integer> order = new ArrayList<>();
+            for(int i = 0;i<data.size();i++)
+            {
+                order.add(data.get(i).getId().intValue());
+                sb.append(String.valueOf(order.get(i))).append(",");
+            }
+
+            SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(ORDER, sb.toString());
+            editor.apply();
+
+
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    };
+
 
     List<Item> storeFilteredDataInList()
     {
@@ -410,6 +448,15 @@ public class Sell extends AppCompatActivity {
         return -1;
     }
 
+    public  void refresh()
+    {
+        data = storeDataInList();
+
+        customAdapter = new CustomAdapter(Sell.this, Sell.this,data);
+        recyclerView.setAdapter(customAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(Sell.this));
+        priceTv.setText("0");
+    }
 
 
 }

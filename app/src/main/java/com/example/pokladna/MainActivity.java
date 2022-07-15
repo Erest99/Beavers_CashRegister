@@ -371,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
-            fileOutputStream.write(("Zbozi:\n\n").getBytes());
+            fileOutputStream.write(("Tocene napoje:\n\n").getBytes());
             Iterator it =pouredDrinks.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry)it.next();

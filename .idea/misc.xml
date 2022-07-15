@@ -3,12 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.196" />
+        <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/drawable/ic_add.xml" value="0.196" />
+        <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/drawable/ic_delete.xml" value="0.196" />
+        <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/drawable/ic_launcher_background.xml" value="0.196" />
+        <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/drawable/ic_no_data.xml" value="0.196" />
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/layout/activity_admin.xml" value="0.358695652173913" />
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/layout/buy_layout.xml" value="0.14722222222222223" />
+        <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/layout/buy_layout.xml" value="0.75" />
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/layout/my_row_sell.xml" value="0.358695652173913" />
-        <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/layout/sell_layout.xml" value="0.14722222222222223" />
-        <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/layout/storage_layout.xml" value="0.14722222222222223" />
+        <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/layout/sell_layout.xml" value="0.67" />
+        <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/layout/storage_layout.xml" value="0.5" />
+        <entry key="..\:/Users/Horky/AndroidStudioProjects/Beavers_CashRegister/app/src/main/res/mipmap-anydpi-v26/myIcon.xml" value="0.196" />
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/layout/activity_add_buy.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/Horky/AndroidStudioProjects/Pokladna/app/src/main/res/layout/activity_test.xml" value="0.36666666666666664" />
