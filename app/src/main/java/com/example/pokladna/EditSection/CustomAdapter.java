@@ -67,6 +67,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 intent.putExtra("amount",String.valueOf(items.get(position).getAmmount()));
                 intent.putExtra("buy",String.valueOf(items.get(position).getBuy()));
                 intent.putExtra("sell",String.valueOf(items.get(position).getSell()));
+                intent.putExtra("tax",String.valueOf(items.get(position).getTax()));
                 //context.startActivity(intent);
                 activity.startActivityForResult(intent,1);
             }
@@ -91,7 +92,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             itemAmount = itemView.findViewById(R.id.itemAmount);
             buyPrice = itemView.findViewById(R.id.Price);
             sellPrice = itemView.findViewById(R.id.sellPrice);
-            constraintLayout = itemView.findViewById(R.id.buyLayout);
+            constraintLayout = itemView.findViewById(R.id.storageAdminLayout);
             translate_anim = AnimationUtils.loadAnimation(context,R.anim.translate_anim);
             constraintLayout.setAnimation(translate_anim);
 

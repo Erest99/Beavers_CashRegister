@@ -105,4 +105,20 @@
     <string name="byCash">By cash</string>
     <string name="QR">Generating QR code</string>
 
+    <string name="tax">Tax</string>
+    <string name="profiles">Profily</string>
+    <string name="admin">Admin</string>
+
+    <string name="newProfile">Nový profil</string>
+    <string name="changePassword">Změnit heslo</string>
+    <string name="deleteProfile">Smazat profil</string>
+    <string name="paswword">Password</string>
+
+    <string name="newPassword">Enter new password:</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="addProfile">Add profile</string>
+    <string name="allData">All records</string>
+
+
 </resources>

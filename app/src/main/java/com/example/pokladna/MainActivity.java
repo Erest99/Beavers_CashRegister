@@ -1,10 +1,5 @@
 package com.example.pokladna;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -12,16 +7,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.example.pokladna.BuySection.Buy;
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
@@ -37,12 +33,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,11 +50,10 @@ public class MainActivity extends AppCompatActivity {
     List<Debt> debts = new ArrayList<>();
     int money;
 
-    String admin = "admin";
-    String acko = "Atym";
-    String bcko = "Btym";
-    String[] profiles = {"penizeAdmin","penizeAtym","penizeB"};
-    String[] sessions = {"sessionAdmin","sessionAtym","sessionBtym"};
+    String[] profiles;
+    String[] profilesMoney = {"cashAdmin","cash1","cash2","cash3","cash4","cash5","cash6","cash7","cash7","cash8","cash9"};
+    String[] sessions = {"sessionAdmin","session1","session2","session3","session4","session5","session6","session7","session8","session9"};
+    final String PROFILES = "profiles";
 
     int activeProfile = 0;
 
@@ -71,15 +66,29 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //set profile
+        //load profiles from SP
         SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-        String profile = sharedPref.getString("profile", "admin");
-        if(profile.equals(admin))activeProfile = 0;
-        else if(profile.equals(acko))activeProfile = 1;
-        else if(profile.equals(bcko))activeProfile = 2;
-
         sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-        money = sharedPref.getInt(profiles[activeProfile], 0);
+        profiles = sharedPref.getString(PROFILES,"admin").split(",");
+
+
+
+        //set profile
+
+        String profile = sharedPref.getString("profile", "admin");
+        if(profile.equals(profiles[0]))activeProfile = 0;
+        else if(profile.equals(profiles[1]))activeProfile = 1;
+        else if(profile.equals(profiles[2]))activeProfile = 2;
+        else if(profile.equals(profiles[3]))activeProfile = 3;
+        else if(profile.equals(profiles[4]))activeProfile = 4;
+        else if(profile.equals(profiles[5]))activeProfile = 5;
+        else if(profile.equals(profiles[6]))activeProfile = 6;
+        else if(profile.equals(profiles[7]))activeProfile = 7;
+        else if(profile.equals(profiles[8]))activeProfile = 8;
+        else if(profile.equals(profiles[9]))activeProfile = 9;
+
+        //choose correct cash record
+        money = sharedPref.getInt(profilesMoney[activeProfile], 0);
 
 
 
@@ -150,8 +159,8 @@ public class MainActivity extends AppCompatActivity {
 //                    writeData(context.getResources().getString(R.string.itemsStart),context.getResources().getString(R.string.debtsStart));
 
                     String sdcard = Environment.getExternalStorageDirectory().getAbsolutePath();
-                    //TODO prozkoumat
-                    Uri file = Uri.fromFile(new File(sdcard+"/Download/test.pdf"));
+                    //TODO prozkoumat - moc to nefuguje :D
+                    Uri file = Uri.fromFile(new File(sdcard+"/Pokladna"));
 
                     loadData();
                     createFile(file, "test_start_" + Calendar.getInstance().getTime().toString() + ".txt" );
@@ -175,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 //                    compareData();
 
                     String sdcard = Environment.getExternalStorageDirectory().getAbsolutePath();
-                    Uri file = Uri.fromFile(new File(sdcard+"/Download/test.pdf"));
+                    Uri file = Uri.fromFile(new File(sdcard+"/Pokladna"));
 
                     loadData();
                     createFile(file,"test_konec_" + Calendar.getInstance().getTime().toString() + ".txt");
@@ -206,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
 
         while(cursor.moveToNext())
         {
-            Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getString(5));
+            Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getInt(5),cursor.getString(6));
             items.add(item);
         }
 
@@ -275,12 +284,23 @@ public class MainActivity extends AppCompatActivity {
             if (resultData != null) {
                 uri = resultData.getData();
                 // Perform operations on the document using its URI.
-                alterDocument(uri);
+                SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+                String title = "Záznam z akce:";
+                if(!sharedPref.getBoolean(sessions[activeProfile],false))
+                {
+                    title= "Záznam ze začátku akce:";
+                }
+                else
+                {
+                    title= "Záznam ze konce akce:";
+                }
+
+                alterDocument(uri,title);
             }
         }
     }
 
-    private void alterDocument(Uri uri) {
+    private void alterDocument(Uri uri,String title) {
         try {
             ParcelFileDescriptor pfd = MainActivity.this.getContentResolver().
                     openFileDescriptor(uri, "w");
@@ -289,13 +309,22 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            fileOutputStream.write(("Seznam zbozi ze zacatku akce:\n").getBytes());
+            fileOutputStream.write((title+"\n").getBytes());
             fileOutputStream.write(("Overwritten at " + System.currentTimeMillis() +
                     "\n").getBytes());
             fileOutputStream.write(("Penize: ").getBytes());
             fileOutputStream.write((String.valueOf(money) + "\n").getBytes());
 
+//            fileOutputStream.write(("Odvod: ".getBytes()));
+//            MyDatabaseHelper myDB = new MyDatabaseHelper(getApplicationContext());
+//            //set profile
+//            SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+//            String profile = sharedPref.getString("profile", "admin");
+//            fileOutputStream.write((String.valueOf(myDB.getProfileTax(profile)) + "\n").getBytes());
+
             fileOutputStream.write(("Zbozi:\n\n").getBytes());
+
+
 
             for (Item i: items)
         {
@@ -304,9 +333,52 @@ public class MainActivity extends AppCompatActivity {
             fileOutputStream.write((i.getBuy().toString() + ",").getBytes());
             fileOutputStream.write((i.getSell().toString() + ",").getBytes());
             fileOutputStream.write((i.getAmmount().toString() + ",").getBytes());
+            fileOutputStream.write((i.getTax().toString() + ",").getBytes());
             fileOutputStream.write((i.getProfile() + "\n").getBytes());
 
         }
+            HashMap<String, Double> pouredDrinks = new HashMap<String, Double>();
+            for (int i = 0;i<items.size();i++)
+            {
+
+                if(items.get(i).getName().contains("0,3l"))
+                {
+
+                   pouredDrinks = countDrinks(pouredDrinks,"0,3l", 0.3,items.get(i));
+
+                }
+                else if(items.get(i).getName().contains("0,5l"))
+                {
+
+                    pouredDrinks = countDrinks(pouredDrinks,"0,5l", 0.5,items.get(i));
+                }
+                else if(items.get(i).getName().contains("0.3l"))
+                {
+
+                    pouredDrinks = countDrinks(pouredDrinks,"0.3l", 0.3,items.get(i));
+                }
+                else if(items.get(i).getName().contains("0.5l"))
+                {
+
+                    pouredDrinks = countDrinks(pouredDrinks,"0.5l", 0.5,items.get(i));
+                }
+                else if(items.get(i).getName().contains("1l"))
+                {
+
+                    pouredDrinks = countDrinks(pouredDrinks,"1l", 1.0,items.get(i));
+                }
+
+
+            }
+
+            fileOutputStream.write(("Zbozi:\n\n").getBytes());
+            Iterator it =pouredDrinks.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                fileOutputStream.write(("napoj: "+pair.getKey() + " ").getBytes());
+                fileOutputStream.write(("objem: "+pair.getValue() + " \n").getBytes());
+                it.remove(); // avoids a ConcurrentModificationException
+            }
 
             fileOutputStream.write(("Dluhy:\n\n").getBytes());
         for (Debt d: debts)
@@ -347,30 +419,32 @@ public class MainActivity extends AppCompatActivity {
         return stringBuilder.toString();
     }
 
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putInt(profiles[activeProfile], money);
-//        editor.apply();
-//    }
 
     protected void onPause(){
         super.onPause();
+        //save profile money
         SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(profiles[activeProfile], money);
+        editor.putInt(profilesMoney[activeProfile], money);
         editor.apply();
     }
 
-//    @Override
-//    protected void onDestroy() {
-//        super.onDestroy();
-//        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-//        SharedPreferences.Editor editor = sharedPref.edit();
-//        editor.putInt(profiles[activeProfile], money);
-//        editor.apply();
-//    }
+    HashMap<String,Double>  countDrinks(HashMap<String,Double> pouredDrinks, String size, Double volume, Item item)
+    {
+        String key = item.getName().replace(size,"");
+        if(pouredDrinks.containsKey(key))
+        {
+            double sum = pouredDrinks.get(key);
+            sum += volume * item.getAmmount();
+            pouredDrinks.put(key,sum);
+
+
+        }
+        else
+        {
+            pouredDrinks.put(key,volume*item.getAmmount());
+        }
+        return pouredDrinks;
+    }
 
 }

@@ -3,7 +3,6 @@ package com.example.pokladna.SellSection;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     private List<Item> items;
     private List<Item> cart = new ArrayList<>();
     private Activity activity;
+    private int price = 0;
     Animation translate_anim;
 
     public List<Item> getCart() {
@@ -42,9 +42,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         this.items = items;
         for (Item i:items)
         {
-            Item it = new Item(i.getId(),i.getName(),i.getBuy(),i.getSell(),0,i.getProfile());
+            Item it = new Item(i.getId(),i.getName(),i.getBuy(),i.getSell(),0,i.getTax(),i.getProfile());
             cart.add(it);
         }
+
 
     }
 
@@ -75,6 +76,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                     holder.pieces++;
                     cart.get(position).setAmmount(holder.pieces);
                     holder.piece.setText(String.valueOf(holder.pieces));
+
+                    price += items.get(position).getSell();
+                    Sell.priceTv.setText(String.valueOf(price));
                 }
 
             }
@@ -88,23 +92,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                     holder.pieces--;
                     cart.get(position).setAmmount(holder.pieces);
                     holder.piece.setText(String.valueOf(holder.pieces));
+
+                    price -= items.get(position).getSell();
+                    Sell.priceTv.setText(String.valueOf(price));
                 }
 
             }
         });
 
-//        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, SellCart.class);
-//                intent.putExtra("id",String.valueOf(items.get(position).getId()));
-//                intent.putExtra("name",items.get(position).getName());
-//                intent.putExtra("amount",String.valueOf(items.get(position).getAmmount()));
-//                intent.putExtra("sell",String.valueOf(items.get(position).getSell()));
-//                //context.startActivity(intent);
-//                activity.startActivityForResult(intent,1);
-//            }
-//        });
+
+
+
     }
 
 

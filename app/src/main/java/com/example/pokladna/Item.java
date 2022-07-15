@@ -7,6 +7,7 @@ public class Item {
     private Integer buy;
     private Integer sell;
     private Integer ammount;
+    private Integer tax;
     private  String profile;
 
 
@@ -59,6 +60,15 @@ public class Item {
     }
 
 
+    public Integer getTax() {
+        return tax;
+    }
+
+    public void setTax(Integer tax) {
+        this.tax = tax;
+    }
+
+
     @Override
     public String toString() {
         return "Item{" +
@@ -70,20 +80,23 @@ public class Item {
                 '}';
     }
 
-    public Item(String name, Integer buy, Integer sell, Integer ammount, String profile) {
+    public Item(String name, Integer buy, Integer sell, Integer ammount, Integer tax, String profile) {
         this.name = name;
         this.buy = buy;
         this.sell = sell;
         this.ammount = ammount;
+        this.tax = tax;
         this.profile = profile;
+
     }
 
-    public Item(Long id, String name, Integer buy, Integer sell, Integer ammount, String profile) {
+    public Item(Long id, String name, Integer buy, Integer sell, Integer ammount,Integer tax, String profile) {
         this.id = id;
         this.name = name;
         this.buy = buy;
         this.sell = sell;
         this.ammount = ammount;
+        this.tax = tax;
         this.profile = profile;
     }
 }

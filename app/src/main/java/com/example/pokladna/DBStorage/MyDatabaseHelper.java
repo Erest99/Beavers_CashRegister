@@ -1,9 +1,7 @@
 package com.example.pokladna.DBStorage;
 
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -36,6 +34,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String COLUMN_DEBTOR = "dluznik";
     private static final String COLUMN_DATE = "datum";
     private static final String COLUMN_PRICE = "cena";
+    private static final String COLUMN_TAX = "odvod";
 
 
     public MyDatabaseHelper(@Nullable Context context) {
@@ -51,6 +50,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_BUY + " INTEGER, " +
                 COLUMN_SELL + " INTEGER, " +
                 COLUMN_AMMOUNT + " INTEGER, " +
+                COLUMN_TAX + " INTEGER, " +
                 COLUMN_PROFILE + " TEXT);";
 
         db.execSQL(query);
@@ -84,6 +84,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_BUY,item.getBuy());
         cv.put(COLUMN_SELL,item.getSell());
         cv.put(COLUMN_AMMOUNT,item.getAmmount());
+        cv.put(COLUMN_TAX,item.getTax());
         cv.put(COLUMN_PROFILE,item.getProfile());
 
         long result = db.insert(TABLE_NAME, null, cv);
@@ -174,6 +175,25 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Integer getProfileTax(String profile)
+    {
+
+        int tax = 0;
+        String query = "SELECT "+COLUMN_TAX+" FROM " + TABLE_NAME + " WHERE " + COLUMN_PROFILE + " = "+ "\""+profile+"\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null)
+        {
+            cursor = db.rawQuery(query,null);
+        }
+
+        while (cursor.moveToNext()) {
+            tax+=cursor.getInt(0);
+        }
+        return tax;
+    }
+
     public Cursor readProfileDebts(String profile)
     {
 
@@ -191,7 +211,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
 
 
-    public void updateData(String row_id, String name, String amount, String buy, String sell, String profile, Context context )
+    public void updateData(String row_id, String name, String amount, String buy, String sell, String tax, String profile, Context context )
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -199,16 +219,17 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_AMMOUNT, amount);
         cv.put(COLUMN_BUY, buy);
         cv.put(COLUMN_SELL, sell);
+        cv.put(COLUMN_TAX,tax);
         cv.put(COLUMN_PROFILE,profile);
 
         long result = db.update(TABLE_NAME,cv,"_id=?",new String[]{row_id});
         if (result ==-1)
         {
-            Toast.makeText(context,context.getResources().getString(R.string.data_update_0), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,context.getResources().getString(R.string.data_update_0), Toast.LENGTH_SHORT).show();
         }
         else
         {
-            Toast.makeText(context,context.getResources().getString(R.string.data_update_1), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,context.getResources().getString(R.string.data_update_1), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -227,11 +248,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result = db.update(TABLE_NAME2,cv,"_id=?",new String[]{row_id});
         if (result ==-1)
         {
-            Toast.makeText(context,context.getResources().getString(R.string.data_update_0), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,context.getResources().getString(R.string.data_update_0), Toast.LENGTH_SHORT).show();
         }
         else
         {
-            Toast.makeText(context,context.getResources().getString(R.string.data_update_1), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,context.getResources().getString(R.string.data_update_1), Toast.LENGTH_SHORT).show();
         }
 
     }

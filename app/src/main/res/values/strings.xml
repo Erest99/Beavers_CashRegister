@@ -105,5 +105,22 @@
     <string name="byCash">Hotově</string>
     <string name="QR">Generuji QR kód</string>
 
+    <string name="tax">Odvod</string>
+    <string name="profiles">Profily</string>
+    <string name="admin">Admin</string>
+
+    <string name="newProfile">Nový profil</string>
+    <string name="changePassword">Změnit heslo</string>
+    <string name="deleteProfile">Smazat profil</string>
+    <string name="paswword">Heslo</string>
+
+    <string name="newPassword">Zadejte nové heslo:</string>
+    <string name="cancel">Zrušit</string>
+
+    <string name="addProfile">Přidat profil</string>
+    <string name="allData">Všechny záznamy</string>
+
+
+
 
 </resources>

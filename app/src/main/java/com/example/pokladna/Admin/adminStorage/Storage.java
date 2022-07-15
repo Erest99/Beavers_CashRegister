@@ -1,4 +1,4 @@
-package com.example.pokladna.EditSection;
+package com.example.pokladna.Admin.adminStorage;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -8,16 +8,18 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,27 +34,28 @@ import com.example.pokladna.Item;
 import com.example.pokladna.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
 public class Storage extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    Button confirmButton, balanceButton;
+    Button confirmButton;
 
     MyDatabaseHelper myDB;
     List<Item> data;
     CustomAdapter customAdapter;
 
     ImageView empty_image;
-    TextView no_data, moneyTv;
+    TextView no_data;
 
     EditText filter;
+    Spinner spinner;
 
-    int money;
+    ArrayList<String> profiles = new ArrayList<>();
 
-    String[] profiles;
-    String[] profilesMoney = {"cashAdmin","cash1","cash2","cash3","cash4","cash5","cash6","cash7","cash7","cash8","cash9"};
+    ArrayList<String> profilesS = new ArrayList<>();
     final String PROFILES = "profiles";
 
     int activeProfile = 0;
@@ -61,20 +64,13 @@ public class Storage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.storage_layout);
+        setContentView(R.layout.admin_storage_layout);
 
+        spinner = findViewById(R.id.spinner4);
         recyclerView = findViewById(R.id.recyclerView);
-        moneyTv = findViewById(R.id.moneyTextView4);
         empty_image = findViewById(R.id.imageNoDataD);
         no_data = findViewById(R.id.textViewNoDataD);
         filter = findViewById(R.id.search2);
-        balanceButton = findViewById(R.id.balanceButton);
-        balanceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                inputDialog();
-            }
-        });
         confirmButton = findViewById(R.id.confirmButton);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,28 +85,23 @@ public class Storage extends AppCompatActivity {
 
         data = storeDataInList();
 
-        //set profile
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-        String profile = sharedPref.getString("profile", "admin");
-        profiles = sharedPref.getString(PROFILES,"admin").split(",");
-        if(profile.equals(profiles[0]))activeProfile = 0;
-        else if(profile.equals(profiles[1]))activeProfile = 1;
-        else if(profile.equals(profiles[2]))activeProfile = 2;
-        else if(profile.equals(profiles[3]))activeProfile = 3;
-        else if(profile.equals(profiles[4]))activeProfile = 4;
-        else if(profile.equals(profiles[5]))activeProfile = 5;
-        else if(profile.equals(profiles[6]))activeProfile = 6;
-        else if(profile.equals(profiles[7]))activeProfile = 7;
-        else if(profile.equals(profiles[8]))activeProfile = 8;
-        else if(profile.equals(profiles[9]))activeProfile = 9;
 
-        sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-        money = sharedPref.getInt(profilesMoney[activeProfile], 0);
-        moneyTv.setText(String.valueOf(money));
 
         customAdapter = new CustomAdapter(Storage.this, Storage.this, data);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(Storage.this));
+
+        //load profiles from SP
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        profiles = new ArrayList<>(Arrays.asList(sharedPref.getString(PROFILES,"admin").split(",")));
+
+        profilesS = new ArrayList<>(profiles);
+        profilesS.remove(0);
+        profilesS.add(0,getApplicationContext().getResources().getString(R.string.allData));
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(Storage.this,android.R.layout.simple_spinner_item,profilesS);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
         filter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -136,6 +127,39 @@ public class Storage extends AppCompatActivity {
 
             }
         });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                if(i == 0)
+                {
+                    data = new ArrayList<>();
+                    data = storeDataInList();
+                    customAdapter = new CustomAdapter(Storage.this, Storage.this, data);
+                    recyclerView.setAdapter(customAdapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(Storage.this));
+                }
+                else
+                {
+                    data = new ArrayList<>();
+                    data = storeDataInList2(profiles.get(i));
+                    customAdapter = new CustomAdapter(Storage.this, Storage.this, data);
+                    recyclerView.setAdapter(customAdapter);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(Storage.this));
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                data = new ArrayList<>();
+                data = storeDataInList();
+                customAdapter = new CustomAdapter(Storage.this, Storage.this, data);
+                recyclerView.setAdapter(customAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(Storage.this));
+            }
+        });
     }
 
     @Override
@@ -151,8 +175,7 @@ public class Storage extends AppCompatActivity {
     {
         List<Item> items = new ArrayList<Item>();
         SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-        String profile = sharedPref.getString("profile", "admin");
-        Cursor cursor = myDB.readProfileData(profile);
+        Cursor cursor = myDB.readAllData();
         String filerText = filter.getText().toString().toLowerCase(Locale.ROOT).trim();
         if(cursor.getCount() == 0)
         {
@@ -178,8 +201,27 @@ public class Storage extends AppCompatActivity {
 
     List<Item> storeDataInList() {
         List<Item> items = new ArrayList<Item>();
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-        String profile = sharedPref.getString("profile", "admin");
+        Cursor cursor = myDB.readAllData();
+        if (cursor.getCount() == 0) {
+            Log.w("Data display", "no data to display");
+            empty_image.setVisibility(View.VISIBLE);
+            no_data.setVisibility(View.VISIBLE);
+
+        } else {
+            empty_image.setVisibility(View.GONE);
+            no_data.setVisibility(View.GONE);
+
+            while (cursor.moveToNext()) {
+                Item item = new Item(Long.valueOf(cursor.getInt(0)), cursor.getString(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4),cursor.getInt(5), cursor.getString(6));
+                items.add(item);
+            }
+        }
+
+        return items;
+    }
+
+    List<Item> storeDataInList2(String profile) {
+        List<Item> items = new ArrayList<Item>();
         Cursor cursor = myDB.readProfileData(profile);
         if (cursor.getCount() == 0) {
             Log.w("Data display", "no data to display");
@@ -239,48 +281,15 @@ public class Storage extends AppCompatActivity {
         builder.create().show();
     }
 
-    protected void onPause() {
-        super.onPause();
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(profilesMoney[activeProfile], money);
-        editor.apply();
-    }
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        myDB = new MyDatabaseHelper(Storage.this);
+        data = new ArrayList<>();
+        data = storeDataInList();
 
-    void inputDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getApplicationContext().getResources().getString(R.string.balancedialogtitle));
-        builder.setMessage(getApplicationContext().getResources().getString(R.string.balancedialog));
-        final EditText balanceInput = new EditText(Storage.this);
-        balanceInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-        builder.setView(balanceInput);
-        builder.setPositiveButton(getApplicationContext().getResources().getString(R.string.add), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(balanceInput.getText().toString().trim().length()>0)
-                money += Integer.valueOf(balanceInput.getText().toString().trim());
-
-                Intent intent = new Intent(Storage.this, Storage.class);
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(getIntent());
-                overridePendingTransition(0, 0);
-
-            }
-        });
-        builder.setNegativeButton(getApplicationContext().getResources().getString(R.string.remove), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(balanceInput.getText().toString().trim().length()>0)
-                money -= Integer.valueOf(balanceInput.getText().toString().trim());
-
-                Intent intent = new Intent(Storage.this, Storage.class);
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(getIntent());
-                overridePendingTransition(0, 0);
-            }
-        });
-        builder.create().show();
+        customAdapter = new CustomAdapter(Storage.this, Storage.this, data);
+        recyclerView.setAdapter(customAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(Storage.this));
     }
 }

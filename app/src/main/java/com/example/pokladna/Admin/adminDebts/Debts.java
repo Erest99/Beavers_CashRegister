@@ -1,4 +1,4 @@
-package com.example.pokladna.Debts;
+package com.example.pokladna.Admin.adminDebts;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -45,18 +45,13 @@ public class Debts extends AppCompatActivity {
     List<Debt> debts;
     EditText filter;
 
-    int money;
 
-    String[] profiles;
-    String[] profilesMoney = {"cashAdmin","cash1","cash2","cash3","cash4","cash5","cash6","cash7","cash7","cash8","cash9"};
-    final String PROFILES = "profiles";
 
-    int activeProfile = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.debt_layout);
+        setContentView(R.layout.admin_debt);
 
         recyclerView = findViewById(R.id.recyclerView);
         empty_image = findViewById(R.id.imageNoDataD);
@@ -88,29 +83,6 @@ public class Debts extends AppCompatActivity {
             }
         });
 
-        payButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                debts = customAdapter.getActive();
-                for (Debt d: debts)
-                {
-                    if(d.getBeingPayed())
-                    {
-                        myDB.deleteOneDebt(d.getId().toString(),getApplicationContext());
-                        money+=d.getPrice();
-                        moneyTv.setText(String.valueOf(money));
-                        customAdapter.notifyDataSetChanged();
-                        data = storeDataInList();
-
-                        customAdapter = new CustomAdapter(Debts.this, Debts.this,data);
-                        recyclerView.setAdapter(customAdapter);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(Debts.this));
-                    }
-                }
-                payTv.setText("0");
-            }
-        });
 
         filter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -149,25 +121,6 @@ public class Debts extends AppCompatActivity {
         //get current money on register
         MainActivity mainActivity = new MainActivity();
 
-        //set profile
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-        String profile = sharedPref.getString("profile", "admin");
-        profiles = sharedPref.getString(PROFILES,"admin").split(",");
-        if(profile.equals(profiles[0]))activeProfile = 0;
-        else if(profile.equals(profiles[1]))activeProfile = 1;
-        else if(profile.equals(profiles[2]))activeProfile = 2;
-        else if(profile.equals(profiles[3]))activeProfile = 3;
-        else if(profile.equals(profiles[4]))activeProfile = 4;
-        else if(profile.equals(profiles[5]))activeProfile = 5;
-        else if(profile.equals(profiles[6]))activeProfile = 6;
-        else if(profile.equals(profiles[7]))activeProfile = 7;
-        else if(profile.equals(profiles[8]))activeProfile = 8;
-        else if(profile.equals(profiles[9]))activeProfile = 9;
-
-        sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-        money = sharedPref.getInt(profilesMoney[activeProfile], 0);
-        moneyTv = findViewById(R.id.moneyTextView);
-        moneyTv.setText(String.valueOf(money));
     }
 
     @Override
@@ -263,14 +216,6 @@ public class Debts extends AppCompatActivity {
             }
         });
         builder.create().show();
-    }
-
-    protected void onPause(){
-        super.onPause();
-        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(profilesMoney[activeProfile], money);
-        editor.apply();
     }
 
 }

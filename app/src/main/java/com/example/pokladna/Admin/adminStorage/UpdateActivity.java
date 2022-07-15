@@ -1,4 +1,4 @@
-package com.example.pokladna.EditSection;
+package com.example.pokladna.Admin.adminStorage;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -21,15 +21,15 @@ import com.example.pokladna.R;
 
 public class UpdateActivity extends AppCompatActivity {
 
-    EditText nameInput, amountInput,buyInput,sellInput, taxInput;
+    EditText nameInput, amountInput,buyInput,sellInput, taxInput, profileInput;
     Button confirmButton, deleteButton;
 
-    String name,id, amount, buy, sell,tax;
+    String name,id, amount, buy, sell,tax,profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.update_layout);
+        setContentView(R.layout.admin_update_storage);
         MyDatabaseHelper myDB = new MyDatabaseHelper(UpdateActivity.this);
 
 
@@ -40,6 +40,7 @@ public class UpdateActivity extends AppCompatActivity {
         taxInput = findViewById(R.id.taxInput2);
         confirmButton = findViewById(R.id.updateButton);
         deleteButton = findViewById(R.id.deleteButton);
+        profileInput = findViewById(R.id.etProfile);
 
         //prepare data
         getAndSetIntentData();
@@ -106,12 +107,14 @@ public class UpdateActivity extends AppCompatActivity {
             buy = getIntent().getStringExtra("buy");
             sell = getIntent().getStringExtra("sell");
             tax = getIntent().getStringExtra("tax");
+            profile = getIntent().getStringExtra("profile");
 
+            taxInput.setText(tax);
             nameInput.setText(name);
             amountInput.setText(amount);
             buyInput.setText(buy);
             sellInput.setText(sell);
-            taxInput.setText(tax);
+            profileInput.setText(profile);
         }
         else
         {
