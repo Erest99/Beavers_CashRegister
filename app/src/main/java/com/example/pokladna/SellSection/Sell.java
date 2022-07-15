@@ -17,8 +17,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +30,7 @@ import com.example.pokladna.Item;
 import com.example.pokladna.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -182,7 +186,46 @@ public class Sell extends AppCompatActivity {
             }
         });
 
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
     }
+
+    ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.START | ItemTouchHelper.END, 0) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+
+            int fromPosition = viewHolder.getAdapterPosition();
+            int toPosition = target.getAdapterPosition();
+            Collections.swap(data, fromPosition, toPosition);
+            recyclerView.getAdapter().notifyItemMoved(fromPosition, toPosition);
+
+            final String ORDER = "order";
+            StringBuilder sb = new StringBuilder();
+            ArrayList<Integer> order = new ArrayList<>();
+            for(int i = 0;i<data.size();i++)
+            {
+                order.add(data.get(i).getId().intValue());
+                sb.append(String.valueOf(order.get(i))).append(",");
+            }
+
+            SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(ORDER, sb.toString());
+            editor.apply();
+
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    };
+
 
     public void updatePayAmount()
     {
@@ -256,6 +299,21 @@ public class Sell extends AppCompatActivity {
             {
                 Item item = new Item(Long.valueOf(cursor.getInt(0)),cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getInt(4),cursor.getInt(5),cursor.getString(6));
                 items.add(item);
+            }
+        }
+
+        sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        String[] order = sharedPref.getString("order","0").split(",");
+        for(int i= order.length - 1; i>= 0;i--)
+        {
+            if(containsID(items,Long.valueOf(order[i])))
+            {
+
+                int index =findIndexByID(items,Long.valueOf(order[i]));
+                Item item = items.get(index);
+                items.remove(index);
+                items.add(0,item);
+
             }
         }
 
@@ -339,6 +397,17 @@ public class Sell extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(profilesMoney[activeProfile], money);
         editor.apply();
+    }
+
+    public boolean containsID(final List<Item> list, final long id){
+        return list.stream().filter(o -> o.getId().equals(id)).findFirst().isPresent();
+    }
+
+    public int findIndexByID(final List<Item> list, final long id){
+        for (Item i: list) {
+            if(i.getId()==id)return list.indexOf(i);
+        }
+        return -1;
     }
 
 

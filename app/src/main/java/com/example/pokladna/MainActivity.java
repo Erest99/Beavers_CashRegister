@@ -35,7 +35,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
@@ -312,14 +315,16 @@ public class MainActivity extends AppCompatActivity {
             fileOutputStream.write(("Penize: ").getBytes());
             fileOutputStream.write((String.valueOf(money) + "\n").getBytes());
 
-            fileOutputStream.write(("Odvod: ".getBytes()));
-            MyDatabaseHelper myDB = new MyDatabaseHelper(getApplicationContext());
-            //set profile
-            SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-            String profile = sharedPref.getString("profile", "admin");
-            fileOutputStream.write((String.valueOf(myDB.getProfileTax(profile)) + "\n").getBytes());
+//            fileOutputStream.write(("Odvod: ".getBytes()));
+//            MyDatabaseHelper myDB = new MyDatabaseHelper(getApplicationContext());
+//            //set profile
+//            SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+//            String profile = sharedPref.getString("profile", "admin");
+//            fileOutputStream.write((String.valueOf(myDB.getProfileTax(profile)) + "\n").getBytes());
 
             fileOutputStream.write(("Zbozi:\n\n").getBytes());
+
+
 
             for (Item i: items)
         {
@@ -332,6 +337,48 @@ public class MainActivity extends AppCompatActivity {
             fileOutputStream.write((i.getProfile() + "\n").getBytes());
 
         }
+            HashMap<String, Double> pouredDrinks = new HashMap<String, Double>();
+            for (int i = 0;i<items.size();i++)
+            {
+
+                if(items.get(i).getName().contains("0,3l"))
+                {
+
+                   pouredDrinks = countDrinks(pouredDrinks,"0,3l", 0.3,items.get(i));
+
+                }
+                else if(items.get(i).getName().contains("0,5l"))
+                {
+
+                    pouredDrinks = countDrinks(pouredDrinks,"0,5l", 0.5,items.get(i));
+                }
+                else if(items.get(i).getName().contains("0.3l"))
+                {
+
+                    pouredDrinks = countDrinks(pouredDrinks,"0.3l", 0.3,items.get(i));
+                }
+                else if(items.get(i).getName().contains("0.5l"))
+                {
+
+                    pouredDrinks = countDrinks(pouredDrinks,"0.5l", 0.5,items.get(i));
+                }
+                else if(items.get(i).getName().contains("1l"))
+                {
+
+                    pouredDrinks = countDrinks(pouredDrinks,"1l", 1.0,items.get(i));
+                }
+
+
+            }
+
+            fileOutputStream.write(("Zbozi:\n\n").getBytes());
+            Iterator it =pouredDrinks.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                fileOutputStream.write(("napoj: "+pair.getKey() + " ").getBytes());
+                fileOutputStream.write(("objem: "+pair.getValue() + " \n").getBytes());
+                it.remove(); // avoids a ConcurrentModificationException
+            }
 
             fileOutputStream.write(("Dluhy:\n\n").getBytes());
         for (Debt d: debts)
@@ -380,6 +427,24 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(profilesMoney[activeProfile], money);
         editor.apply();
+    }
+
+    HashMap<String,Double>  countDrinks(HashMap<String,Double> pouredDrinks, String size, Double volume, Item item)
+    {
+        String key = item.getName().replace(size,"");
+        if(pouredDrinks.containsKey(key))
+        {
+            double sum = pouredDrinks.get(key);
+            sum += volume * item.getAmmount();
+            pouredDrinks.put(key,sum);
+
+
+        }
+        else
+        {
+            pouredDrinks.put(key,volume*item.getAmmount());
+        }
+        return pouredDrinks;
     }
 
 }

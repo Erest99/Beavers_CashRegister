@@ -46,6 +46,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             cart.add(it);
         }
 
+
     }
 
 
@@ -98,6 +99,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
 
             }
         });
+
+
+
 
     }
 

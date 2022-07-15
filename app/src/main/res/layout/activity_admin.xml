@@ -8,9 +8,11 @@
 
     <Button
         android:id="@+id/debtsButton"
-        android:layout_width="149dp"
+        android:layout_width="0dp"
         android:layout_height="91dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/debts"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,9 +20,11 @@
 
     <Button
         android:id="@+id/storagesButton"
-        android:layout_width="149dp"
+        android:layout_width="0dp"
         android:layout_height="91dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/storage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,8 +32,10 @@
 
     <Button
         android:id="@+id/profileButton"
-        android:layout_width="149dp"
+        android:layout_width="0dp"
         android:layout_height="91dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/profiles"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

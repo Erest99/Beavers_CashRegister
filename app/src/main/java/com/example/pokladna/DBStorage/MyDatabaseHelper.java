@@ -225,11 +225,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result = db.update(TABLE_NAME,cv,"_id=?",new String[]{row_id});
         if (result ==-1)
         {
-            Toast.makeText(context,context.getResources().getString(R.string.data_update_0), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,context.getResources().getString(R.string.data_update_0), Toast.LENGTH_SHORT).show();
         }
         else
         {
-            Toast.makeText(context,context.getResources().getString(R.string.data_update_1), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,context.getResources().getString(R.string.data_update_1), Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -248,11 +248,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         long result = db.update(TABLE_NAME2,cv,"_id=?",new String[]{row_id});
         if (result ==-1)
         {
-            Toast.makeText(context,context.getResources().getString(R.string.data_update_0), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,context.getResources().getString(R.string.data_update_0), Toast.LENGTH_SHORT).show();
         }
         else
         {
-            Toast.makeText(context,context.getResources().getString(R.string.data_update_1), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context,context.getResources().getString(R.string.data_update_1), Toast.LENGTH_SHORT).show();
         }
 
     }
