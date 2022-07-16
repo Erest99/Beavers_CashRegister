@@ -440,23 +440,26 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, Login.class);
         startActivity(intent);
 
-    HashMap<String,Double>  countDrinks(HashMap<String,Double> pouredDrinks, String size, Double volume, Item item)
-    {
-        String key = item.getName().replace(size,"");
-        if(pouredDrinks.containsKey(key))
-        {
-            double sum = pouredDrinks.get(key);
-            sum += volume * item.getAmmount();
-            pouredDrinks.put(key,sum);
-
-
-        }
-        else
-        {
-            pouredDrinks.put(key,volume*item.getAmmount());
-        }
-        return pouredDrinks;
-
     }
+
+
+        HashMap<String,Double>  countDrinks(HashMap<String,Double> pouredDrinks, String size, Double volume, Item item)
+        {
+            String key = item.getName().replace(size,"");
+            if(pouredDrinks.containsKey(key))
+            {
+                double sum = pouredDrinks.get(key);
+                sum += volume * item.getAmmount();
+                pouredDrinks.put(key,sum);
+
+
+            }
+            else
+            {
+                pouredDrinks.put(key,volume*item.getAmmount());
+            }
+            return pouredDrinks;
+
+        }
 
 }
