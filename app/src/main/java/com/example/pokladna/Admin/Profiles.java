@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.pokladna.BuySection.Buy;
+import com.example.pokladna.MainActivity;
 import com.example.pokladna.R;
 
 import java.util.ArrayList;
@@ -146,5 +148,11 @@ public class Profiles extends AppCompatActivity {
             }
         });
         builder.create().show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Profiles.this, Admin.class);
+        startActivity(intent);
     }
 }

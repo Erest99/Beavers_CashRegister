@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
+import com.example.pokladna.EditSection.Storage;
 import com.example.pokladna.MainActivity;
 import com.example.pokladna.R;
 
@@ -271,6 +272,27 @@ public class Debts extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(profilesMoney[activeProfile], money);
         editor.apply();
+    }
+
+    @Override
+    public void onBackPressed() {
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(profilesMoney[activeProfile], money);
+        editor.apply();
+
+        Intent intent = new Intent(Debts.this, MainActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        data = storeDataInList();
+
+        customAdapter = new CustomAdapter(Debts.this, Debts.this,data);
+        recyclerView.setAdapter(customAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(Debts.this));
     }
 
 }

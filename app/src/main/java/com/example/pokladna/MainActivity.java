@@ -25,6 +25,7 @@ import com.example.pokladna.Debts.Debt;
 import com.example.pokladna.Debts.Debts;
 import com.example.pokladna.EditSection.Storage;
 import com.example.pokladna.SellSection.Sell;
+import com.example.pokladna.ui.Login;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -429,6 +430,16 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
+
+    @Override
+    public void onBackPressed() {
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(profilesMoney[activeProfile], money);
+        editor.apply();
+        Intent intent = new Intent(MainActivity.this, Login.class);
+        startActivity(intent);
+
     HashMap<String,Double>  countDrinks(HashMap<String,Double> pouredDrinks, String size, Double volume, Item item)
     {
         String key = item.getName().replace(size,"");
@@ -445,6 +456,7 @@ public class MainActivity extends AppCompatActivity {
             pouredDrinks.put(key,volume*item.getAmmount());
         }
         return pouredDrinks;
+
     }
 
 }

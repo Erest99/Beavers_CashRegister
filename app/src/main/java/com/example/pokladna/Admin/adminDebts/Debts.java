@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pokladna.Admin.Admin;
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.MainActivity;
 import com.example.pokladna.R;
@@ -216,6 +217,15 @@ public class Debts extends AppCompatActivity {
             }
         });
         builder.create().show();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+
+        Intent intent = new Intent(Debts.this, Admin.class);
+        startActivity(intent);
+
     }
 
 }

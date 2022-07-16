@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.Item;
+import com.example.pokladna.MainActivity;
 import com.example.pokladna.R;
 
 import java.util.ArrayList;
@@ -399,6 +400,17 @@ public class Sell extends AppCompatActivity {
         editor.apply();
     }
 
+
+    @Override
+    public void onBackPressed() {
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(profilesMoney[activeProfile], money);
+        editor.apply();
+        Intent intent = new Intent(Sell.this, MainActivity.class);
+        startActivity(intent);
+    }
+
     public boolean containsID(final List<Item> list, final long id){
         return list.stream().filter(o -> o.getId().equals(id)).findFirst().isPresent();
     }
@@ -412,4 +424,14 @@ public class Sell extends AppCompatActivity {
 
 
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        data = storeDataInList();
+
+        customAdapter = new CustomAdapter(Sell.this, Sell.this,data);
+        recyclerView.setAdapter(customAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(Sell.this));
+
+    }
 }
