@@ -8,9 +8,11 @@
 
     <Button
         android:id="@+id/debtSectionButton"
-        android:layout_width="149dp"
+        android:layout_width="0dp"
         android:layout_height="91dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/debts"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,9 +20,11 @@
 
     <Button
         android:id="@+id/payButton"
-        android:layout_width="149dp"
+        android:layout_width="0dp"
         android:layout_height="91dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/sell"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,9 +32,11 @@
 
     <Button
         android:id="@+id/storageButton"
-        android:layout_width="149dp"
+        android:layout_width="0dp"
         android:layout_height="91dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/storage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,19 +44,23 @@
 
     <Button
         android:id="@+id/buyButton"
-        android:layout_width="149dp"
+        android:layout_width="0dp"
         android:layout_height="91dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/buy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07999998" />
+        app:layout_constraintVertical_bias="0.29000002" />
 
     <Button
         android:id="@+id/sessionButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:text="@string/newSession"
         app:layout_constraintBottom_toBottomOf="parent"

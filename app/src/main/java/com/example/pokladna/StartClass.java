@@ -30,6 +30,7 @@ public class StartClass extends Application {
             //save profiles to S.P.
             final String PROFILES = "profiles";
             final String PASSWORDS = "passwords";
+
             String[] profiles = {"admin"};
             String[] passwords = {"0729"};
 
@@ -46,5 +47,16 @@ public class StartClass extends Application {
             editor.putBoolean("init",true);
             editor.apply();
         }
+
+
+        final String ORDER = "order";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 10.; i++) {
+            sb.append(String.valueOf(i)).append(",");
+        }
+        sharedPref = this.getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(ORDER, sb.toString());
+        editor.apply();
     }
 }
