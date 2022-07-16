@@ -1,6 +1,7 @@
 package com.example.pokladna.Admin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -61,5 +62,11 @@ public class AddProfile extends AppCompatActivity {
                 Toast.makeText(AddProfile.this, "Nový profil přidán", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(AddProfile.this, Admin.class);
+        startActivity(intent);
     }
 }

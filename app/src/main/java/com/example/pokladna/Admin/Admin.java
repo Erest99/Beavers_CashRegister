@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pokladna.Admin.adminDebts.Debts;
 import com.example.pokladna.Admin.adminStorage.Storage;
+import com.example.pokladna.MainActivity;
 import com.example.pokladna.R;
 
 public class Admin extends AppCompatActivity {
@@ -49,5 +50,11 @@ public class Admin extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Admin.this, MainActivity.class);
+        startActivity(intent);
     }
 }

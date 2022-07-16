@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.pokladna.Admin.Admin;
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.Item;
 import com.example.pokladna.R;
@@ -291,5 +292,13 @@ public class Storage extends AppCompatActivity {
         customAdapter = new CustomAdapter(Storage.this, Storage.this, data);
         recyclerView.setAdapter(customAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(Storage.this));
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(Storage.this, Admin.class);
+        startActivity(intent);
+
     }
 }

@@ -13,8 +13,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
+import com.example.pokladna.EditSection.Storage;
 import com.example.pokladna.InputHelper;
 import com.example.pokladna.Item;
+import com.example.pokladna.MainActivity;
 import com.example.pokladna.R;
 
 import java.util.Locale;
@@ -108,5 +110,16 @@ public class BuyToStorage extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(profilesMoney[activeProfile], money);
         editor.apply();
+    }
+
+    @Override
+    public void onBackPressed() {
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(profilesMoney[activeProfile], money);
+        editor.apply();
+
+        Intent intent = new Intent(BuyToStorage.this, Buy.class);
+        startActivity(intent);
     }
 }

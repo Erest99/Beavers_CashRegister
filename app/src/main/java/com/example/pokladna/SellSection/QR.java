@@ -14,7 +14,9 @@ import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.pokladna.MainActivity;
 import com.example.pokladna.R;
+import com.example.pokladna.ui.Login;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -108,5 +110,12 @@ public class QR extends AppCompatActivity {
         Bitmap bitmap = Bitmap.createBitmap(width,height, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels,0,width,0,0,width,height);
         return bitmap;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(QR.this, Sell.class);
+        startActivity(intent);
     }
 }

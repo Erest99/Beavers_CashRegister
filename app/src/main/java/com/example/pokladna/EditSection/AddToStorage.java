@@ -15,7 +15,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.pokladna.InputHelper;
 import com.example.pokladna.Item;
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
+import com.example.pokladna.MainActivity;
 import com.example.pokladna.R;
+import com.example.pokladna.ui.Login;
 
 import java.util.Locale;
 
@@ -74,5 +76,12 @@ public class AddToStorage extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(AddToStorage.this, Storage.class);
+        startActivity(intent);
     }
 }

@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
 import com.example.pokladna.Item;
+import com.example.pokladna.MainActivity;
 import com.example.pokladna.R;
 
 import java.util.ArrayList;
@@ -247,6 +248,17 @@ public class Storage extends AppCompatActivity {
         editor.apply();
     }
 
+    @Override
+    public void onBackPressed() {
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(profilesMoney[activeProfile], money);
+
+        Intent intent = new Intent(Storage.this, MainActivity.class);
+        startActivity(intent);
+
+    }
+
     void inputDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(getApplicationContext().getResources().getString(R.string.balancedialogtitle));
@@ -282,5 +294,15 @@ public class Storage extends AppCompatActivity {
             }
         });
         builder.create().show();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        data = storeDataInList();
+
+        customAdapter = new CustomAdapter(Storage.this, Storage.this,data);
+        recyclerView.setAdapter(customAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(Storage.this));
     }
 }

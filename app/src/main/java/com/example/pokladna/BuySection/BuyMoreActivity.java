@@ -15,6 +15,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
+import com.example.pokladna.EditSection.Storage;
+import com.example.pokladna.MainActivity;
 import com.example.pokladna.R;
 
 public class BuyMoreActivity extends AppCompatActivity {
@@ -138,6 +140,17 @@ public class BuyMoreActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(profilesMoney[activeProfile], money);
         editor.apply();
+    }
+
+    @Override
+    public void onBackPressed() {
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(profilesMoney[activeProfile], money);
+        editor.apply();
+
+        Intent intent = new Intent(BuyMoreActivity.this, Buy.class);
+        startActivity(intent);
     }
 
 }

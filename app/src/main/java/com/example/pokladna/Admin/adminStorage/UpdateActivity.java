@@ -17,6 +17,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pokladna.DBStorage.MyDatabaseHelper;
+import com.example.pokladna.MainActivity;
 import com.example.pokladna.R;
 
 public class UpdateActivity extends AppCompatActivity {
@@ -145,6 +146,15 @@ public class UpdateActivity extends AppCompatActivity {
             }
         });
         builder.create().show();
+    }
+
+    @Override
+    public void onBackPressed() {
+
+
+        Intent intent = new Intent(UpdateActivity.this, Storage.class);
+        startActivity(intent);
+
     }
 
 }
