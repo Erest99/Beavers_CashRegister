@@ -225,6 +225,20 @@ public class Sell extends AppCompatActivity {
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
 
         }
+
+        @Override
+        public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
+            super.onSelectedChanged(viewHolder, actionState);
+            if(actionState == ItemTouchHelper.ACTION_STATE_IDLE)
+            {
+                data = storeDataInList();
+
+                customAdapter = new CustomAdapter(Sell.this, Sell.this,data);
+                recyclerView.setAdapter(customAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(Sell.this));
+                priceTv.setText("0");
+            }
+        }
     };
 
 
@@ -277,6 +291,8 @@ public class Sell extends AppCompatActivity {
         }
 
     }
+
+
 
     List<Item> storeDataInList()
     {
