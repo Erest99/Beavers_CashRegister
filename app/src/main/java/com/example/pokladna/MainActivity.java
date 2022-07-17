@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                     Uri file = Uri.fromFile(new File(sdcard+"/Pokladna"));
 
                     loadData();
-                    createFile(file, "test_start_" + Calendar.getInstance().getTime().toString() + ".txt" );
+                    createFile(file, "Akce_start_" + Calendar.getInstance().getTime().toString() + ".txt" );
 
                    //openFile(file);
                     //openDirectory(dir);
@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                     Uri file = Uri.fromFile(new File(sdcard+"/Pokladna"));
 
                     loadData();
-                    createFile(file,"test_konec_" + Calendar.getInstance().getTime().toString() + ".txt");
+                    createFile(file,"Akce_konec_" + Calendar.getInstance().getTime().toString() + ".txt");
 //                    openFile(file);
 //                    openDirectory(dir);
 
