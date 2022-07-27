@@ -120,5 +120,10 @@
     <string name="addProfile">Add profile</string>
     <string name="allData">All records</string>
 
+    <string name="dialogtitle">Event results</string>
+    <string name="sold">Sold:</string>
+    <string name="taxd">Tax:</string>
+    <string name="gain">Profit:</string>
+
 
 </resources>

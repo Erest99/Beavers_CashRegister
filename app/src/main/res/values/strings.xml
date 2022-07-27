@@ -120,6 +120,11 @@
     <string name="addProfile">Přidat profil</string>
     <string name="allData">Všechny záznamy</string>
 
+    <string name="dialogtitle">Výpis z akce</string>
+    <string name="sold">Prodáno:</string>
+    <string name="taxd">Odvod:</string>
+    <string name="gain">Zisk:</string>
+
 
 
 

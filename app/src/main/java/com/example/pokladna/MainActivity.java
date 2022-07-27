@@ -2,7 +2,9 @@ package com.example.pokladna;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,6 +16,8 @@ import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +42,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -48,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private Boolean sessionStarted = false;
     List<Item> items = new ArrayList<>();
     List<Debt> debts = new ArrayList<>();
-    int money;
+    int money,tax,value;
+    int startValue,endValue,startTax,endTax;
 
     String[] profiles;
     String[] profilesMoney = {"cashAdmin","cash1","cash2","cash3","cash4","cash5","cash6","cash7","cash7","cash8","cash9"};
@@ -68,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
         //load profiles from SP
         SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-        sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
         profiles = sharedPref.getString(PROFILES,"admin").split(",");
 
 
@@ -228,6 +233,44 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void calculateTaxStart()
+    {
+        startValue = 0;
+        startTax = 0;
+        for (Item i:items) {
+            startValue += i.getSell()*i.getAmmount();
+            startTax += i.getTax()*i.getAmmount();
+        }
+
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(profiles[activeProfile] + " sessionValue", startValue);
+        editor.putInt(profiles[activeProfile] + " sessionTax", startTax);
+        editor.apply();
+    }
+
+    private void calculateTaxEnd()
+    {
+        endTax = 0;
+        endValue = 0;
+        for (Item i:items) {
+
+            endValue += i.getSell()*i.getAmmount();
+            endTax += i.getTax()*i.getAmmount();
+
+        }
+        //load profiles from SP
+        SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
+        startValue = sharedPref.getInt(profiles[activeProfile] + " sessionValue",0);
+        startTax = sharedPref.getInt(profiles[activeProfile] + " sessionTax",0);
+        tax = (startTax - endTax);
+        value = (startValue - endValue);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(profiles[activeProfile] + " sessionValue", 0);
+        editor.putInt(profiles[activeProfile] + " sessionTax", 0);
+        editor.apply();
+    }
+
     // Request code for creating a PDF document.
     private static final int CREATE_FILE = 1;
 
@@ -288,19 +331,23 @@ public class MainActivity extends AppCompatActivity {
                 String title = "Záznam z akce:";
                 if(!sharedPref.getBoolean(sessions[activeProfile],false))
                 {
-                    title= "Záznam ze začátku akce:";
+                    calculateTaxEnd();
+                   title= "Záznam ze konce akce:";
+                    alterDocument(uri,title,true);
                 }
                 else
                 {
-                    title= "Záznam ze konce akce:";
+                    calculateTaxStart();
+                    title= "Záznam ze začátku akce:";
+                    alterDocument(uri,title,false);
                 }
 
-                alterDocument(uri,title);
+
             }
         }
     }
 
-    private void alterDocument(Uri uri,String title) {
+    private void alterDocument(Uri uri,String title, boolean isEnd) {
         try {
             ParcelFileDescriptor pfd = MainActivity.this.getContentResolver().
                     openFileDescriptor(uri, "w");
@@ -309,9 +356,17 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
             fileOutputStream.write((title+"\n").getBytes());
             fileOutputStream.write(("Overwritten at " + System.currentTimeMillis() +
                     "\n").getBytes());
+
+            if(isEnd)
+            {
+                fileOutputStream.write(("Zaplatit klubu: " + tax + "\n").getBytes());
+                fileOutputStream.write(("Prodáno: " + value + "\n").getBytes());
+                fileOutputStream.write(("Zisk: " + (value-tax) + "\n").getBytes());
+            }
             fileOutputStream.write(("Penize: ").getBytes());
             fileOutputStream.write((String.valueOf(money) + "\n").getBytes());
 
@@ -401,6 +456,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if(isEnd)Dialog();
         items = new ArrayList<>();
         debts = new ArrayList<>();
     }
@@ -445,6 +501,21 @@ public class MainActivity extends AppCompatActivity {
             pouredDrinks.put(key,volume*item.getAmmount());
         }
         return pouredDrinks;
+    }
+
+    void Dialog()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getApplicationContext().getResources().getString(R.string.dialogtitle));
+        builder.setMessage(getApplicationContext().getResources().getString(R.string.sold) + " " + value + "\n"+
+                getApplicationContext().getResources().getString(R.string.taxd) + " " + tax + "\n"+
+                getApplicationContext().getResources().getString(R.string.gain) + " " + (value-tax) + "\n");
+        builder.setPositiveButton(getApplicationContext().getResources().getString(R.string.buy_layout_confirm), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.create().show();
     }
 
 }

@@ -438,7 +438,11 @@ public class Sell extends AppCompatActivity {
     }
 
     public boolean containsID(final List<Item> list, final long id){
-        return list.stream().filter(o -> o.getId().equals(id)).findFirst().isPresent();
+
+        for (Item i: list) {
+            if(i.getId()==id)return true;
+        }
+        return false;
     }
 
     public int findIndexByID(final List<Item> list, final long id){
