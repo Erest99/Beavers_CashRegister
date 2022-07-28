@@ -51,7 +51,7 @@ public class AddToStorage extends AppCompatActivity {
         profiles = new ArrayList<>(Arrays.asList(sharedPref.getString(PROFILES,"admin").split(",")));
 
         profilesS = new ArrayList<>(profiles);
-        profilesS.remove(0);
+        //profilesS.remove(0);
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddToStorage.this,android.R.layout.simple_spinner_item,profilesS);

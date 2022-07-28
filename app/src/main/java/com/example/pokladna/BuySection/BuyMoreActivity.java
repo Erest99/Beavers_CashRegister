@@ -22,7 +22,7 @@ public class BuyMoreActivity extends AppCompatActivity {
     EditText nameInput, amountInput,buyInput,sellInput, additionalInput;
     Button confirmButton;
 
-    String name,id, amount, buy, sell;
+    String name,id, amount, buy, sell, profile;
 
     int money;
     String tax;
@@ -71,8 +71,6 @@ public class BuyMoreActivity extends AppCompatActivity {
                         &&sellInput.getText().toString().length()>0
                         &&amountInput.getText().toString().length()>0)
                 {
-                    SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-                    String profile = sharedPref.getString("profile", "admin");
                     myDB.updateData(id,name,amount,buy,sell,tax,profile,getApplicationContext());
                     money -= Integer.valueOf(additionalInput.getText().toString().trim()) * Integer.valueOf(buy);
                     Intent intent = new Intent(BuyMoreActivity.this, Buy.class);
@@ -120,11 +118,18 @@ public class BuyMoreActivity extends AppCompatActivity {
             buy = getIntent().getStringExtra("buy");
             sell = getIntent().getStringExtra("sell");
             tax = getIntent().getStringExtra("tax");
+            profile = getIntent().getStringExtra("profile");
 
             nameInput.setText(name);
             amountInput.setText(amount);
             buyInput.setText(buy);
             sellInput.setText(sell);
+
+            if(profile.equals("admin"))
+            {
+                additionalInput.setEnabled(false);
+                confirmButton.setEnabled(false);
+            }
         }
         else
         {

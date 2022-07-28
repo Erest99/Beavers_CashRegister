@@ -63,6 +63,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
                 intent.putExtra("buy",String.valueOf(items.get(position).getBuy()));
                 intent.putExtra("sell",String.valueOf(items.get(position).getSell()));
                 intent.putExtra("tax",String.valueOf(items.get(position).getTax()));
+                intent.putExtra("profile",String.valueOf(items.get(position).getProfile()));
                 context.startActivity(intent);
             }
         });

@@ -24,7 +24,7 @@ public class UpdateActivity extends AppCompatActivity {
     EditText nameInput, amountInput,buyInput,sellInput, taxInput;
     Button confirmButton, deleteButton;
 
-    String name,id, amount, buy, sell,tax;
+    String name,id, amount, buy, sell,tax, profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +48,8 @@ public class UpdateActivity extends AppCompatActivity {
         ActionBar ab = getSupportActionBar();
         ab.setTitle(name);
 
+
+
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,8 +69,7 @@ public class UpdateActivity extends AppCompatActivity {
                         &&amountInput.getText().toString().length()>0
                         &&taxInput.getText().toString().length()>0)
                 {
-                    SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
-                    String profile = sharedPref.getString("profile", "admin");
+
                     myDB.updateData(id,name,amount,buy,sell,tax,profile,getApplicationContext());
                     Intent intent = new Intent(UpdateActivity.this, Storage.class);
                     startActivity(intent);
@@ -106,12 +107,23 @@ public class UpdateActivity extends AppCompatActivity {
             buy = getIntent().getStringExtra("buy");
             sell = getIntent().getStringExtra("sell");
             tax = getIntent().getStringExtra("tax");
+            profile = getIntent().getStringExtra("profile");
 
             nameInput.setText(name);
             amountInput.setText(amount);
             buyInput.setText(buy);
             sellInput.setText(sell);
             taxInput.setText(tax);
+
+            if(profile.equals("admin"))
+            {
+                nameInput.setEnabled(false);
+                amountInput.setEnabled(false);
+                buyInput.setEnabled(false);
+                sellInput.setEnabled(false);
+                taxInput.setEnabled(false);
+                deleteButton.setEnabled(false);
+            }
         }
         else
         {

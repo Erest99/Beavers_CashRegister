@@ -175,6 +175,20 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
+    public Cursor readProfileDataWAdmin(String profile)
+    {
+
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_PROFILE + " = "+ "\""+profile+"\"" + " OR "+ COLUMN_PROFILE + " = "+ "\"admin\"";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if(db != null)
+        {
+            cursor = db.rawQuery(query,null);
+        }
+        return cursor;
+    }
+
     public Integer getProfileTax(String profile)
     {
 

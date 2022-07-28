@@ -152,7 +152,7 @@ public class Storage extends AppCompatActivity {
         List<Item> items = new ArrayList<Item>();
         SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS",Context.MODE_PRIVATE);
         String profile = sharedPref.getString("profile", "admin");
-        Cursor cursor = myDB.readProfileData(profile);
+        Cursor cursor = myDB.readProfileDataWAdmin(profile);
         String filerText = filter.getText().toString().toLowerCase(Locale.ROOT).trim();
         if(cursor.getCount() == 0)
         {
@@ -180,7 +180,7 @@ public class Storage extends AppCompatActivity {
         List<Item> items = new ArrayList<Item>();
         SharedPreferences sharedPref = getApplication().getSharedPreferences("BEAVERS", Context.MODE_PRIVATE);
         String profile = sharedPref.getString("profile", "admin");
-        Cursor cursor = myDB.readProfileData(profile);
+        Cursor cursor = myDB.readProfileDataWAdmin(profile);
         if (cursor.getCount() == 0) {
             Log.w("Data display", "no data to display");
             empty_image.setVisibility(View.VISIBLE);

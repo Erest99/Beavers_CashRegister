@@ -56,6 +56,7 @@
         <activity
             android:name=".BuySection.Buy"
             android:exported="true"
+            android:windowSoftInputMode="stateHidden"
             android:label="@string/buy"
             android:parentActivityName=".MainActivity" />
         <activity
@@ -66,6 +67,7 @@
         <activity
             android:name=".EditSection.Storage"
             android:exported="true"
+            android:windowSoftInputMode="stateHidden"
             android:label="@string/storage"
             android:parentActivityName=".MainActivity" />
         <activity
@@ -81,11 +83,13 @@
         <activity
             android:name=".SellSection.Sell"
             android:exported="true"
+            android:windowSoftInputMode="stateHidden"
             android:label="@string/selling"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".Debts.Debts"
             android:exported="true"
+            android:windowSoftInputMode="stateHidden"
             android:label="@string/debts"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".Admin.Profiles"
